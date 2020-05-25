@@ -6,6 +6,7 @@ import socket
 import json
 from dlxlibs.DlxLoggingFormatter import DlxLoggingFormatter
 from logging.handlers import TimedRotatingFileHandler
+from dlxlibs.DlxKafkaLoggingHandler import DlxKafkaLoggingHandler
 
 
 class DlxLogger:
@@ -129,9 +130,13 @@ class DlxLogger:
 
         :return:
         """
-        console_handler = logging.StreamHandler(sys.stdout)
-        console_handler.setFormatter(self._formatter)
-        return console_handler
+        try:
+            console_handler = logging.StreamHandler(sys.stdout)
+            console_handler.setFormatter(self._formatter)
+            return console_handler
+        except:
+            return None
+
 
     def _get_file_handler(self):
         """
@@ -139,9 +144,23 @@ class DlxLogger:
 
         :return:
         """
-        file_handler = TimedRotatingFileHandler(self._full_log_file_name, when='midnight')
-        file_handler.setFormatter(self._formatter)
-        return file_handler
+        try:
+            file_handler = TimedRotatingFileHandler(self._full_log_file_name, when='midnight')
+            file_handler.setFormatter(self._formatter)
+            return file_handler
+        except:
+            return None
+    
+
+    def _get_kafka_handler(self):
+        try:
+            #kurl = "lala09010.edp-prod.deluxe.com:2181,ala09011.edp-prod.deluxe.com:2181,ala09012.edp-prod.deluxe.com:2181/kafka"
+            kurl = "lala09010.edp-prod.deluxe.com,ala09011.edp-prod.deluxe.com,ala09012.edp-prod.deluxe.com"
+            return DlxKafkaLoggingHandler(kurl, 2181, "logs-apps-dlxc-main")
+        except:
+            return None
+
+
 
     def get_logger(self):
         """
@@ -153,6 +172,7 @@ class DlxLogger:
         logger.setLevel(logging.DEBUG)  # better to have too much log than not enough
         logger.addHandler(self._get_console_handler())
         logger.addHandler(self._get_file_handler())
+        logger.addHandler(self._get_kafka_handler())
         # with this pattern, it's rarely necessary to propagate the error up to parent
         logger.propagate = False
         return logger
