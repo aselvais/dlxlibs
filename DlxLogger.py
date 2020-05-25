@@ -156,10 +156,3 @@ class DlxLogger:
         # with this pattern, it's rarely necessary to propagate the error up to parent
         logger.propagate = False
         return logger
-
-
-
-
-
-
-

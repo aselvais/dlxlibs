@@ -11,6 +11,7 @@ class DlxLoggingFormatter(Formatter):
         """
         Removes carriage return from the msg
         and custom formating
+        
         :param record:
         :return:
         """

@@ -10,6 +10,9 @@ class DlxBitbucket(DlxBash):
     _password = ""
 
     def __init__(self):
+        """
+        Initialization
+        """
         pass
 
     def set_credentials(self, username="", password=""):
