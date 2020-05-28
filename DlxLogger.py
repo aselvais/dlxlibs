@@ -4,6 +4,7 @@ import os
 import getpass
 import socket
 import json
+import re
 from dlxlibs.DlxLoggingFormatter import DlxLoggingFormatter
 from logging.handlers import TimedRotatingFileHandler
 from dlxlibs.DlxKafkaLoggingHandler import DlxKafkaLoggingHandler
@@ -34,8 +35,9 @@ class DlxLogger:
     _username = ''
     _homedir = ''
     _hostname = ''
+    _handlers='kfc'
 
-    def __init__(self, app_name="", format="json", log_ext="log"):
+    def __init__(self, app_name="", format="json", log_ext="log", handlers="kfc"):
         """
         Constructor initializing some base vars
 
@@ -170,9 +172,13 @@ class DlxLogger:
         """
         logger = logging.getLogger()
         logger.setLevel(logging.DEBUG)  # better to have too much log than not enough
-        logger.addHandler(self._get_console_handler())
-        logger.addHandler(self._get_file_handler())
-        logger.addHandler(self._get_kafka_handler())
+        if re.search('c', self._handlers):
+            logger.addHandler(self._get_console_handler())
+        if re.search('f', self._handlers):
+            logger.addHandler(self._get_file_handler())
+        if re.search('k', self._handlers):
+            logger.addHandler(self._get_kafka_handler())
+
         # with this pattern, it's rarely necessary to propagate the error up to parent
         logger.propagate = False
         return logger
