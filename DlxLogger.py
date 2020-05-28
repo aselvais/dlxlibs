@@ -55,6 +55,7 @@ class DlxLogger:
             self._app_name = app_name
         self._log_format = format
         self._log_ext = log_ext
+        self._handlers = handlers
         self._full_log_file_name = os.path.dirname(os.path.realpath(__file__)) + self._log_dir + self._app_name + '.' + self._log_ext
         self._formatter = self._get_format()
         try:
@@ -173,11 +174,17 @@ class DlxLogger:
         logger = logging.getLogger()
         logger.setLevel(logging.DEBUG)  # better to have too much log than not enough
         if re.search('c', self._handlers):
-            logger.addHandler(self._get_console_handler())
+            ch = self._get_console_handler()
+            if ch != None:
+                logger.addHandler(ch)
         if re.search('f', self._handlers):
-            logger.addHandler(self._get_file_handler())
+            fh = self._get_file_handler()
+            if fh != None:
+                logger.addHandler(fh)
         if re.search('k', self._handlers):
-            logger.addHandler(self._get_kafka_handler())
+            kh = self._get_kafka_handler()
+            if kh != None:
+                logger.addHandler(kh)
 
         # with this pattern, it's rarely necessary to propagate the error up to parent
         logger.propagate = False
