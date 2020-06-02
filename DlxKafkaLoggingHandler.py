@@ -27,7 +27,7 @@ class DlxKafkaLoggingHandler(logging.Handler):
 
     _KAFKA_TOPIC = str('log-loggers')
 
-    def __init__(self, host, port, topic, key=None):
+    def __init__(self):
         """
         """
         logging.Handler.__init__(self)
@@ -37,22 +37,25 @@ class DlxKafkaLoggingHandler(logging.Handler):
         ssl_context = ssl.create_default_context(cafile='/etc/pki/tls/certs/ca-bundle.crt')
         ssl_context.options |= (ssl.PROTOCOL_TLSv1 | ssl.OP_NO_TLSv1_1 | ssl.OP_NO_TLSv1_2 | ssl.OP_NO_COMPRESSION)
 
-        self.producer = KafkaProducer(
-            bootstrap_servers=bootstrap_servers,
-            api_version=None,
-            security_protocol='SASL_SSL',
-            sasl_mechanism='GSSAPI',
-            sasl_kerberos_service_name='kafka',
-            ssl_password="changeit",
-            ssl_keyfile="/opt/cloudera/security/pki/jks/jssecacerts-java-1.8.jks",
-            ssl_context=ssl_context,
-            acks=1,
-            retries=1,
-            api_version_auto_timeout_ms=6000,
-            client_id=socket.gethostname(),
-            receive_buffer_bytes=1024*10,
-            send_buffer_bytes=1024*10
-        )
+        try:
+            self.producer = KafkaProducer(
+                bootstrap_servers=bootstrap_servers,
+                api_version=None,
+                security_protocol='SASL_SSL',
+                sasl_mechanism='GSSAPI',
+                sasl_kerberos_service_name='kafka',
+                ssl_password="changeit",
+                ssl_keyfile="/opt/cloudera/security/pki/jks/jssecacerts-java-1.8.jks",
+                ssl_context=ssl_context,
+                acks=1,
+                retries=1,
+                api_version_auto_timeout_ms=6000,
+                client_id=socket.gethostname(),
+                receive_buffer_bytes=1024*10,
+                send_buffer_bytes=1024*10
+            )
+        except:
+            print('Kafka could not connect')
 
     def emit(self, record):
         """
@@ -63,7 +66,7 @@ class DlxKafkaLoggingHandler(logging.Handler):
         try:
             #use default formatting
             msg = self.format(record)
-            future = self.producer.send(self._KAFKA_TOPIC, msg)
+            future = self.producer.send(self._KAFKA_TOPIC, msg.encode())
             try:
                 record_metadata = future.get(timeout=5)
             except KafkaError:
@@ -71,7 +74,7 @@ class DlxKafkaLoggingHandler(logging.Handler):
                 #logging.exception()
                 pass
         except:
-            pass
+            print('Could not send msg to kafka')
 
     def close(self):
         """

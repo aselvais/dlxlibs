@@ -156,10 +156,11 @@ class DlxLogger:
     
 
     def _get_kafka_handler(self):
+        """
+        Write to Kafka
+        """
         try:
-            #kurl = "lala09010.edp-prod.deluxe.com:2181,ala09011.edp-prod.deluxe.com:2181,ala09012.edp-prod.deluxe.com:2181/kafka"
-            kurl = "lala09010.edp-prod.deluxe.com,ala09011.edp-prod.deluxe.com,ala09012.edp-prod.deluxe.com"
-            return DlxKafkaLoggingHandler(kurl, 2181, "logs-apps-dlxc-main")
+            return DlxKafkaLoggingHandler()
         except:
             return None
 
