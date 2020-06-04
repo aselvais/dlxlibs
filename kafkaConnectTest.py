@@ -4,7 +4,11 @@
 # wkt /tmp/keytabs/t442512.keytab
 # exit
 #
+#
+# automation_logs and automation_meta_store are you two DBs
+#
 # ------------------------------------------------------------------------------------- #
+#
 
 import os
 import json
