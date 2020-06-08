@@ -16,7 +16,6 @@ import socket
 import gssapi
 import logging
 import ssl
-import socket
 from datetime import datetime as dt
 import kafka
 from kafka import *

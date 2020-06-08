@@ -159,6 +159,7 @@ class DlxLogger:
         """
         Write to Kafka
         """
+        return DlxKafkaLoggingHandler()
         try:
             return DlxKafkaLoggingHandler()
         except:
@@ -182,10 +183,16 @@ class DlxLogger:
             fh = self._get_file_handler()
             if fh != None:
                 logger.addHandler(fh)
+        
+        '''
         if re.search('k', self._handlers):
             kh = self._get_kafka_handler()
             if kh != None:
                 logger.addHandler(kh)
+        '''
+
+        kh = self._get_kafka_handler()
+        logger.addHandler(kh)
 
         # with this pattern, it's rarely necessary to propagate the error up to parent
         logger.propagate = False
