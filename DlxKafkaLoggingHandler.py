@@ -67,7 +67,7 @@ class DlxKafkaLoggingHandler(StreamHandler):
         if record.name == 'kafka':
             return
         msg = self.format(record)
-        self.producer.send(self._KAFKA_TOPIC, msg.encode())
+        self.producer.send(self._KAFKA_TOPIC, msg)
         #record_metadata = future.get(timeout=10)
         '''
         try:

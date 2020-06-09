@@ -1,0 +1,67 @@
+from kafka import KafkaProducer
+import json
+import os
+import ssl
+import socket
+
+_ = os.environ["KRB5_CLIENT_KTNAME"] = "t442512.keytab"
+ssl_context = ssl.create_default_context(cafile='/etc/pki/tls/certs/ca-bundle.crt')
+ssl_context.options |= (ssl.PROTOCOL_TLSv1 | ssl.OP_NO_TLSv1_1 | ssl.OP_NO_TLSv1_2 | ssl.OP_NO_COMPRESSION)
+
+
+class MyKafka(object):
+
+    def __init__(self, kafka_brokers, json=False):
+        """
+        
+        """
+        self.json = json
+        if not json:
+            self.producer = KafkaProducer(
+                bootstrap_servers=kafka_brokers,
+                api_version=None,
+                security_protocol='SASL_SSL',
+                sasl_mechanism='GSSAPI',
+                sasl_kerberos_service_name='kafka',
+                ssl_password="changeit",
+                ssl_keyfile="/opt/cloudera/security/pki/jks/jssecacerts-java-1.8.jks",
+                ssl_context=ssl_context,
+                acks=1,
+                retries=1,
+                api_version_auto_timeout_ms=6000,
+                client_id=socket.gethostname(),
+                receive_buffer_bytes=1024*10,
+                send_buffer_bytes=1024*10
+            )
+        else:
+            try:
+                self.producer = KafkaProducer(
+                    #value_serializer=lambda v: json.dumps(v).encode('utf-8'),
+                        bootstrap_servers=kafka_brokers,
+                        api_version=None,
+                        security_protocol='SASL_SSL',
+                        sasl_mechanism='GSSAPI',
+                        sasl_kerberos_service_name='kafka',
+                        ssl_password="changeit",
+                        ssl_keyfile="/opt/cloudera/security/pki/jks/jssecacerts-java-1.8.jks",
+                        ssl_context=ssl_context,
+                        acks=1,
+                        retries=1,
+                        api_version_auto_timeout_ms=6000,
+                        client_id=socket.gethostname(),
+                        receive_buffer_bytes=1024*10,
+                        send_buffer_bytes=1024*10
+                )
+            except:
+                print('Can not connect to Kafka')
+        #print(self.producer)
+
+    def send(self, data, topic):
+        """
+
+        """
+        if self.json:
+            result = self.producer.send(topic, key=b'log', value=data)
+        else:
+            result = self.producer.send(topic, data.encode())
+

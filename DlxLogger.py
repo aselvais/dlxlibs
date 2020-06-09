@@ -7,7 +7,8 @@ import json
 import re
 from dlxlibs.DlxLoggingFormatter import DlxLoggingFormatter
 from logging.handlers import TimedRotatingFileHandler
-from dlxlibs.DlxKafkaLoggingHandler import DlxKafkaLoggingHandler
+#from dlxlibs.DlxKafkaLoggingHandler import DlxKafkaLoggingHandler
+from dlxlibs.KafkaHandler import KafkaHandler
 
 
 class DlxLogger:
@@ -23,7 +24,6 @@ class DlxLogger:
         my_logger.debug("THIS IS IT ! a debug message")
 
     This will create a CSV formatted file with a .csv extension
-
     """
 
     _app_name = "default"
@@ -83,8 +83,8 @@ class DlxLogger:
             'csv': '"'+'","'.join(self._get_log_schema('values'))+'"',
             'json': json.dumps(self._get_log_schema())
         }
-        # return logging.Formatter(fmt=FORMATTERS[self._log_format])
         return DlxLoggingFormatter(FORMATTERS[self._log_format])
+
 
     def _get_log_schema(self, type="all"):
         """
@@ -159,12 +159,14 @@ class DlxLogger:
         """
         Write to Kafka
         """
-        return DlxKafkaLoggingHandler()
         try:
-            return DlxKafkaLoggingHandler()
+            bootstrap_servers = "ala09035.edp-prod.deluxe.com:9093,ala09036.edp-prod.deluxe.com:9093,ala09037.edp-prod.deluxe.com:9093"
+            kafka_handler = KafkaHandler(bootstrap_servers, 'log-loggers')
+            kafka_handler.setFormatter(self._formatter)
+            return kafka_handler
+            #return DlxKafkaLoggingHandler()
         except:
             return None
-
 
 
     def get_logger(self):
@@ -173,26 +175,26 @@ class DlxLogger:
 
         :return:
         """
-        logger = logging.getLogger()
+        logger = logging.getLogger(__name__)
         logger.setLevel(logging.DEBUG)  # better to have too much log than not enough
+        #  logger.setLevel(logging.ERROR)  # better to have too much log than not enough
+        chs = logging.StreamHandler()
+        logger.addHandler(chs)
+
         if re.search('c', self._handlers):
             ch = self._get_console_handler()
             if ch != None:
                 logger.addHandler(ch)
+        
         if re.search('f', self._handlers):
             fh = self._get_file_handler()
             if fh != None:
                 logger.addHandler(fh)
         
-        '''
         if re.search('k', self._handlers):
             kh = self._get_kafka_handler()
             if kh != None:
                 logger.addHandler(kh)
-        '''
-
-        kh = self._get_kafka_handler()
-        logger.addHandler(kh)
 
         # with this pattern, it's rarely necessary to propagate the error up to parent
         logger.propagate = False

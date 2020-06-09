@@ -11,11 +11,11 @@
 #
 
 import os
+import ssl
 import json
 import socket
 import gssapi
 import logging
-import ssl
 from datetime import datetime as dt
 import kafka
 from kafka import *
@@ -28,6 +28,10 @@ bootstrap_servers = "ala09035.edp-prod.deluxe.com:9093,ala09036.edp-prod.deluxe.
 KAFKA_TOPIC = str('log-loggers')
 ssl_context = ssl.create_default_context(cafile='/etc/pki/tls/certs/ca-bundle.crt')
 ssl_context.options |= (ssl.PROTOCOL_TLSv1 | ssl.OP_NO_TLSv1_1 | ssl.OP_NO_TLSv1_2 | ssl.OP_NO_COMPRESSION)
+
+
+print(socket.gethostname())
+
 
 producer = KafkaProducer(
     bootstrap_servers=bootstrap_servers,
@@ -92,3 +96,41 @@ except KafkaError:
 
 print('------ END -----')
 
+
+
+'''
+import logging
+from KafkaHandler import KafkaHandler
+
+
+logging.basicConfig(
+    format='%(asctime)s %(levelname)s %(message)s', 
+    level=logging.INFO, 
+    datefmt='%m/%d/%Y %I:%M:%S %p'
+)
+
+logger = logging.getLogger('log-loggers')
+
+ch = logging.StreamHandler()
+
+#ch.setLevel(logging.INFO)
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+ch.setFormatter(formatter)
+logger.addHandler(ch)
+
+#fl = logging.FileHandler("myapp.log")
+#logger.addHandler(fl)
+
+bootstrap_servers = "ala09035.edp-prod.deluxe.com:9093,ala09036.edp-prod.deluxe.com:9093,ala09037.edp-prod.deluxe.com:9093"
+kh = KafkaHandler(bootstrap_servers, "log-loggers")
+kh.setLevel(logging.INFO)
+logger.addHandler(kh)
+
+logger.info('{"asctime": "2020-05-28 18:34:11,311", "levelname": "WARNING", "levelno": "30", "message": "a warning message", "module": "loggertest", "filename": "loggertest.py", "homedir": "", "pathname": "/home/cdsw/loggertest.py", "created": "1590690851.311904", "msecs": "311", "relativeCreated": "246", "name": "root", "username": "", "hostname": "", "funcName": "<module>", "lineno": "8", "process": "19639", "processName": "MainProcess", "thread": "139825395328768", "threadName": "MainThread", "args": "()", "exc_info": "None", "exc_text": "None", "stack_info": "None"}')
+logger.debug('{"asctime": "2020-05-28 18:34:11,311", "levelname": "ERROR", "levelno": "40", "message": "an error message", "module": "loggertest", "filename": "loggertest.py", "homedir": "", "pathname": "/home/cdsw/loggertest.py", "created": "1590690851.311990", "msecs": "311", "relativeCreated": "246", "name": "root", "username": "", "hostname": "", "funcName": "<module>", "lineno": "9", "process": "19639", "processName": "MainProcess", "thread": "139825395328768", "threadName": "MainThread", "args": "()", "exc_info": "None", "exc_text": "None", "stack_info": "None"}')
+logger.error('{"asctime": "2020-05-28 18:34:11,311", "levelname": "ERROR", "levelno": "40", "message": "an error message", "module": "loggertest", "filename": "loggertest.py", "homedir": "", "pathname": "/home/cdsw/loggertest.py", "created": "1590690851.311990", "msecs": "311", "relativeCreated": "246", "name": "root", "username": "", "hostname": "", "funcName": "<module>", "lineno": "9", "process": "19639", "processName": "MainProcess", "thread": "139825395328768", "threadName": "MainThread", "args": "()", "exc_info": "None", "exc_text": "None", "stack_info": "None"}')
+
+print('------ END 2 -----')
+
+# kafka-console-consumer --bootstrap-server ala09035.edp-prod.deluxe.com:9093,ala09036.edp-prod.deluxe.com:9093,ala09037.edp-prod.deluxe.com:9093 --topic log-loggers --from-beginning
+'''
