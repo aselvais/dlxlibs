@@ -7,8 +7,7 @@ import json
 import re
 from dlxlibs.DlxLoggingFormatter import DlxLoggingFormatter
 from logging.handlers import TimedRotatingFileHandler
-#from dlxlibs.DlxKafkaLoggingHandler import DlxKafkaLoggingHandler
-from dlxlibs.KafkaHandler import KafkaHandler
+from dlxlibs.DlxKafkaLoggingHandler import DlxKafkaLoggingHandler
 
 
 class DlxLogger:
@@ -161,10 +160,9 @@ class DlxLogger:
         """
         try:
             bootstrap_servers = "ala09035.edp-prod.deluxe.com:9093,ala09036.edp-prod.deluxe.com:9093,ala09037.edp-prod.deluxe.com:9093"
-            kafka_handler = KafkaHandler(bootstrap_servers, 'log-loggers')
-            kafka_handler.setFormatter(self._formatter)
-            return kafka_handler
-            #return DlxKafkaLoggingHandler()
+            _dlxKafkaLoggingHandler = DlxKafkaLoggingHandler(bootstrap_servers, 'log-loggers')
+            _dlxKafkaLoggingHandler.setFormatter(self._formatter)
+            return _dlxKafkaLoggingHandler
         except:
             return None
 
@@ -176,8 +174,7 @@ class DlxLogger:
         :return:
         """
         logger = logging.getLogger(__name__)
-        logger.setLevel(logging.DEBUG)  # better to have too much log than not enough
-        #  logger.setLevel(logging.ERROR)  # better to have too much log than not enough
+        logger.setLevel(logging.DEBUG)
         chs = logging.StreamHandler()
         logger.addHandler(chs)
 

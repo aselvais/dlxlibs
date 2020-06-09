@@ -9,16 +9,19 @@ ssl_context = ssl.create_default_context(cafile='/etc/pki/tls/certs/ca-bundle.cr
 ssl_context.options |= (ssl.PROTOCOL_TLSv1 | ssl.OP_NO_TLSv1_1 | ssl.OP_NO_TLSv1_2 | ssl.OP_NO_COMPRESSION)
 
 
-class MyKafka(object):
+class DlxKafkaBroker(object):
 
-    def __init__(self, kafka_brokers, json=False):
+    def __init__(self, bootstrap_servers, json=False):
         """
-        
+        Constructor initializing the Kafka connection
+
+        :param bootstrap_servers: List of kafka server to use
+        :param json: Boolean (default: False), should we use JSON mode
         """
         self.json = json
         if not json:
             self.producer = KafkaProducer(
-                bootstrap_servers=kafka_brokers,
+                bootstrap_servers=bootstrap_servers,
                 api_version=None,
                 security_protocol='SASL_SSL',
                 sasl_mechanism='GSSAPI',
@@ -37,7 +40,7 @@ class MyKafka(object):
             try:
                 self.producer = KafkaProducer(
                     #value_serializer=lambda v: json.dumps(v).encode('utf-8'),
-                        bootstrap_servers=kafka_brokers,
+                        bootstrap_servers=bootstrap_servers,
                         api_version=None,
                         security_protocol='SASL_SSL',
                         sasl_mechanism='GSSAPI',
@@ -54,11 +57,14 @@ class MyKafka(object):
                 )
             except:
                 print('Can not connect to Kafka')
-        #print(self.producer)
+
 
     def send(self, data, topic):
         """
+        Send message to Kafka
 
+        :param data: Data to send as a kafka message
+        :param topic: Topic to write to
         """
         if self.json:
             result = self.producer.send(topic, key=b'log', value=data)
