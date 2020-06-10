@@ -137,6 +137,7 @@ class DlxLogger:
             console_handler.setFormatter(self._formatter)
             return console_handler
         except:
+            raise Exception('Console handler init failed')
             return None
 
 
@@ -151,6 +152,7 @@ class DlxLogger:
             file_handler.setFormatter(self._formatter)
             return file_handler
         except:
+            raise Exception('File handler init failed. Check that the "logs" directory exists in the root of your project.')
             return None
     
 
@@ -164,6 +166,7 @@ class DlxLogger:
             _dlxKafkaLoggingHandler.setFormatter(self._formatter)
             return _dlxKafkaLoggingHandler
         except:
+            raise Exception('Kafka handler init failed')
             return None
 
 

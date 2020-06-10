@@ -19,42 +19,28 @@ class DlxKafkaBroker(object):
         :param json: Boolean (default: False), should we use JSON mode
         """
         self.json = json
+        prms = {
+                #'value_serializer': (lambda v: json.dumps(v).encode('utf-8')),
+                'bootstrap_servers': bootstrap_servers,
+                'api_version': None,
+                'security_protocol': 'SASL_SSL',
+                'sasl_mechanism': 'GSSAPI',
+                'sasl_kerberos_service_name': 'kafka',
+                'ssl_password': "changeit",
+                'ssl_keyfile': "/opt/cloudera/security/pki/jks/jssecacerts-java-1.8.jks",
+                'ssl_context': ssl_context,
+                'acks': 1,
+                'retries': 1,
+                'api_version_auto_timeout_ms': 6000,
+                'client_id': socket.gethostname(),
+                'receive_buffer_bytes': 1024*10,
+                'send_buffer_bytes': 1024*10
+        }
         if not json:
-            self.producer = KafkaProducer(
-                bootstrap_servers=bootstrap_servers,
-                api_version=None,
-                security_protocol='SASL_SSL',
-                sasl_mechanism='GSSAPI',
-                sasl_kerberos_service_name='kafka',
-                ssl_password="changeit",
-                ssl_keyfile="/opt/cloudera/security/pki/jks/jssecacerts-java-1.8.jks",
-                ssl_context=ssl_context,
-                acks=1,
-                retries=1,
-                api_version_auto_timeout_ms=6000,
-                client_id=socket.gethostname(),
-                receive_buffer_bytes=1024*10,
-                send_buffer_bytes=1024*10
-            )
+            self.producer = KafkaProducer(**prms)
         else:
             try:
-                self.producer = KafkaProducer(
-                    #value_serializer=lambda v: json.dumps(v).encode('utf-8'),
-                        bootstrap_servers=bootstrap_servers,
-                        api_version=None,
-                        security_protocol='SASL_SSL',
-                        sasl_mechanism='GSSAPI',
-                        sasl_kerberos_service_name='kafka',
-                        ssl_password="changeit",
-                        ssl_keyfile="/opt/cloudera/security/pki/jks/jssecacerts-java-1.8.jks",
-                        ssl_context=ssl_context,
-                        acks=1,
-                        retries=1,
-                        api_version_auto_timeout_ms=6000,
-                        client_id=socket.gethostname(),
-                        receive_buffer_bytes=1024*10,
-                        send_buffer_bytes=1024*10
-                )
+                self.producer = KafkaProducer(**prms)
             except:
                 print('Can not connect to Kafka')
 
