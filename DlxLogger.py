@@ -60,6 +60,10 @@ class DlxLogger:
     _homedir = ''
     _hostname = ''
     _handlers='kfc'
+    _source_system_name = "logs"
+    _schema_name = "logs"
+    _table_name = "logs"
+    _env = "dev"
 
     def __init__(
         self, 
@@ -69,7 +73,8 @@ class DlxLogger:
         handlers="kfc",
         source_system_name="logs",
         schema_name="logs",
-        table_name="logs"
+        table_name="logs",
+        env="dev"
         ):
         """
         Constructor initializing some base vars
@@ -82,6 +87,13 @@ class DlxLogger:
         :param schema_name: Schema name (default: logs)
         :param table_name: Table name (default: logs)
         """
+        self._source_system_name = source_system_name
+        self._schema_name = schema_name
+        self._table_name = table_name
+        # @todo : get this from the env where it is running
+        # The idea is to make it "prod" when it runs in the context of Rundeck
+        self._env = env
+
         if app_name == "":
             try:
                 caller = sys._getframe(1)
@@ -131,6 +143,10 @@ class DlxLogger:
         :return:
         """
         _ldata = {
+            "source_system_name": self._source_system_name,
+            "schema_name": self._schema_name,
+            "table_name": self._table_name,
+            "dev": self._env,
             "asctime": '%(asctime)s',                   ## | eg: "asctime": "2020-05-01 08:51:46,374"
             "levelname": '%(levelname)s',               ## | eg: "levelname": "DEBUG"
             "levelno": '%(levelno)s',                   ## | eg: "levelno": "10"
