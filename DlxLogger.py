@@ -5,6 +5,15 @@ import getpass
 import socket
 import json
 import re
+
+try:
+    # @todo : Find another cleaner way to make this generic
+    sys.path.append("/home/cdsw/")
+    sys.path.append("/home/cdsw/code/sparkcode/lcllibs/")
+except:
+    pass
+
+
 from dlxlibs.DlxLoggingFormatter import DlxLoggingFormatter
 from logging.handlers import TimedRotatingFileHandler
 from dlxlibs.DlxKafkaLoggingHandler import DlxKafkaLoggingHandler
