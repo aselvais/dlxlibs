@@ -14,13 +14,29 @@ class DlxLogger:
     """
     Generic logger class for Deluxe on the EDP
 
+    :param app_name: 
+        Application/logger name (default: default)
+    :param format: 
+        sting - csv | json | default - Log format see FORMATTERS (default: json)
+    :param log_ext: 
+        Log file extension (default: log)
+    :param handlers: 
+        Handlers to setup. k=Kafka, f=file, c=console (default: kfc)
+    :param source_system_name: 
+        Name of the source system or app (default: logs)
+    :param schema_name: 
+        Schema name (default: logs)
+    :param table_name: 
+        Table name (default: logs)
+
+
      Usage:
         my_logger = DlxLogger().get_logger()
         my_logger.debug("a debug message")
 
     other example:
         my_logger = DlxLogger("", "csv", "csv").get_logger()
-        my_logger.debug("THIS IS IT ! a debug message")
+        my_logger.debug("THIS IS IT ! a debug message", {command: "INSERT", storagename: "logs__logs__testtable", count: 20})
 
     This will create a CSV formatted file with a .csv extension
     """
@@ -36,13 +52,26 @@ class DlxLogger:
     _hostname = ''
     _handlers='kfc'
 
-    def __init__(self, app_name="", format="json", log_ext="log", handlers="kfc"):
+    def __init__(
+        self, 
+        app_name="", 
+        format="json", 
+        log_ext="log", 
+        handlers="kfc",
+        source_system_name="logs",
+        schema_name="logs",
+        table_name="logs"
+        ):
         """
         Constructor initializing some base vars
 
         :param app_name: Application/logger name (default: default)
         :param format: sting - csv | json | default - Log format see FORMATTERS (default: json)
         :param log_ext: Log file extension (default: log)
+        :param handlers: Handlers to setup. k=Kafka, f=file, c=console (default: kfc)
+        :param source_system_name: Name of the source system or app (default: logs)
+        :param schema_name: Schema name (default: logs)
+        :param table_name: Table name (default: logs)
         """
         if app_name == "":
             try:
