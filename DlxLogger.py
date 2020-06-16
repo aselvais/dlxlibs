@@ -146,7 +146,7 @@ class DlxLogger:
             "source_system_name": self._source_system_name,
             "schema_name": self._schema_name,
             "table_name": self._table_name,
-            "dev": self._env,
+            "env": self._env,
             "asctime": '%(asctime)s',                   ## | eg: "asctime": "2020-05-01 08:51:46,374"
             "levelname": '%(levelname)s',               ## | eg: "levelname": "DEBUG"
             "levelno": '%(levelno)s',                   ## | eg: "levelno": "10"
