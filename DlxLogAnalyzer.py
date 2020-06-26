@@ -36,9 +36,13 @@ class DlxLogAnalyzer:
 
     def _process_df(self, df):
         df.drop_duplicates()
+
         self.convertColumns(df, 'date', ['asctime'], ['asctimeDt'])
         self.convertColumns(df, 'datefnum', ['created'], ['createdDt'])
         self.convertColumns(df, 'ms2str', ['relativeCreated'], ['relativeCreatedFormated'])
+
+        df['mselapsed'] = df['relativeCreated'] - df['relativeCreated'].shift(1)
+
         return df.sort_values(by='created')
 
     def get_logs_df(self):
@@ -52,7 +56,9 @@ class DlxLogAnalyzer:
         Returns a simplified dataframe with the data
         """
         return self._df[[
-            #'asctimeDt', 
+            'asctimeDt', 
+            'relativeCreated',
+            'mselapsed',
             'relativeCreatedFormated',
             'levelname',
             'message',
@@ -108,5 +114,9 @@ if __name__ == '__main__':
         dlxLogAnalyzer = DlxLogAnalyzer([str(sys.argv[1])])
         df = dlxLogAnalyzer.get_simple_df()
         print(tabulate(df, headers='keys', tablefmt='psql', showindex=False))
-    except:
-        print("Error displaying the logs, ardument missing like the filename ?")
+        # df.to_excel('./loganalizer_temp.xlsx')
+    except e:
+        print(e)
+        print("Error displaying the logs, arguments missing like the filename ?")
+
+        

@@ -29,4 +29,5 @@ class DlxLoggingFormatter(Formatter):
                 pass
         else:
             record.msg = re.sub(r'^\"|\"$', '', json.dumps(record.msg))
+            #record.exc_text = re.sub(r'^\"|\"$', '', json.dumps(record.exc_text))
         return super(DlxLoggingFormatter, self).format(record)
