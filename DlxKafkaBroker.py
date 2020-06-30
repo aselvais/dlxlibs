@@ -15,8 +15,9 @@ class DlxKafkaBroker(object):
         """
         Constructor initializing the Kafka connection
 
-        :param bootstrap_servers: List of kafka server to use
-        :param json: Boolean (default: False), should we use JSON mode
+        Args:
+            bootstrap_servers ([type]): List of kafka server to use
+            json (bool, optional): Boolean (default: False), should we use JSON mode. Defaults to False.
         """
         self.json = json
         prms = {
@@ -49,8 +50,9 @@ class DlxKafkaBroker(object):
         """
         Send message to Kafka
 
-        :param data: Data to send as a kafka message
-        :param topic: Topic to write to
+        Args:
+            data ([type]): Data to send as a kafka message
+            topic ([type]): Topic to write to
         """
         if self.json:
             result = self.producer.send(topic, key=b'log', value=data)

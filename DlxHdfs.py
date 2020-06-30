@@ -7,15 +7,27 @@ _logger = DlxLogger().get_logger()
 
 
 class DlxHdfs(DlxBash):
+    """
+    Simple API to access HDFS for our EDP platform
+
+    Args:
+        DlxBash ([type]): [description]
+    """
+
 
     def __init__(self):
         pass
 
+
     def _file_system_line_to_dict(self, l):
         """
         Returns a dictionary out of a ls line (from HDFS)
-        :param l:
-        :return:
+
+        Args:
+            l ([type]): [description]
+
+        Returns:
+            [type]: [description]
         """
         m = re.search(
             '^([+drwxt-]{10,11})[ ]{1,50}([0-9-]{1,20})[ ]{1,50}([A-z0-9]{1,50})[ ]{1,50}([A-z0-9]{1,50})[ ]{1,50}([0-9]{1,50})[ ]{1,50}([0-9-]{10})[ ]{1,50}([0-9:]{5})[ ]{1,50}(.*)$',
@@ -45,8 +57,12 @@ class DlxHdfs(DlxBash):
         """
         List files in hdfs
         [-ls [-C] [-d] [-h] [-q] [-R] [-t] [-S] [-r] [-u] [-e] [<path> ...]]
-        :param path: string Path (default: "" will list your local dir on hdfs)
-        :return:
+
+        Args:
+            path (str, optional): Path. Defaults to "".
+
+        Returns:
+            [type]: [description]
         """
         _logger.debug("HDFS fs \"" + path + "\"")
         r = self._execute_command('hdfs dfs -ls ' + path).split("\n")

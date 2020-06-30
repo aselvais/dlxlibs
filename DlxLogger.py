@@ -13,9 +13,8 @@ try:
 except:
     pass
 
-
-from dlxlibs.DlxLoggingFormatter import DlxLoggingFormatter
 from logging.handlers import TimedRotatingFileHandler
+from dlxlibs.DlxLoggingFormatter import DlxLoggingFormatter
 from dlxlibs.DlxKafkaLoggingHandler import DlxKafkaLoggingHandler
 
 
@@ -23,21 +22,15 @@ class DlxLogger:
     """
     Generic logger class for Deluxe on the EDP
 
-    :param app_name: 
-        Application/logger name (default: default)
-    :param format: 
-        sting - csv | json | default - Log format see FORMATTERS (default: json)
-    :param log_ext: 
-        Log file extension (default: log)
-    :param handlers: 
-        Handlers to setup. k=Kafka, f=file, c=console (default: kfc)
-    :param source_system_name: 
-        Name of the source system or app (default: logs)
-    :param schema_name: 
-        Schema name (default: logs)
-    :param table_name: 
-        Table name (default: logs)
-
+    Args:
+        app_name (str, optional): Application/logger name. Defaults to "".
+        format (str, optional): csv | json | default - Log format see FORMATTERS. Defaults to "json".
+        log_ext (str, optional): Log file extension. Defaults to "log".
+        handlers (str, optional): Handlers to setup. k=Kafka, f=file, c=console. Defaults to "kfc".
+        source_system_name (str, optional): Name of the source system or app. Defaults to "logs".
+        schema_name (str, optional): Schema name. Defaults to "logs".
+        table_name (str, optional): Table name. Defaults to "logs".
+        env (str, optional): Environment, dev | prod. Defaults to "dev".
 
      Usage:
         my_logger = DlxLogger().get_logger()
@@ -79,13 +72,15 @@ class DlxLogger:
         """
         Constructor initializing some base vars
 
-        :param app_name: Application/logger name (default: default)
-        :param format: sting - csv | json | default - Log format see FORMATTERS (default: json)
-        :param log_ext: Log file extension (default: log)
-        :param handlers: Handlers to setup. k=Kafka, f=file, c=console (default: kfc)
-        :param source_system_name: Name of the source system or app (default: logs)
-        :param schema_name: Schema name (default: logs)
-        :param table_name: Table name (default: logs)
+        Args:
+            app_name (str, optional): Application/logger name. Defaults to "".
+            format (str, optional): csv | json | default - Log format see FORMATTERS. Defaults to "json".
+            log_ext (str, optional): Log file extension. Defaults to "log".
+            handlers (str, optional): Handlers to setup. k=Kafka, f=file, c=console. Defaults to "kfc".
+            source_system_name (str, optional): Name of the source system or app. Defaults to "logs".
+            schema_name (str, optional): Schema name. Defaults to "logs".
+            table_name (str, optional): Table name. Defaults to "logs".
+            env (str, optional): Environment, dev | prod. Defaults to "dev".
         """
         self._source_system_name = source_system_name
         self._schema_name = schema_name
@@ -125,7 +120,8 @@ class DlxLogger:
         """
         Get log formatter
 
-        :return: logging.Formatter
+        Returns:
+            DlxLoggingFormatter: logging.Formatter
         """
         FORMATTERS = {
             'default': "%(asctime)s — %(name)s — %(levelname)s — %(message)s",
@@ -139,8 +135,11 @@ class DlxLogger:
         """
         Returns the log schemas in various form according to the type param
 
-        :param type: String - all | values | keys
-        :return:
+        Args:
+            type (str, optional): all | values | keys. Defaults to "all".
+
+        Returns:
+            dict: The schema of a log entry
         """
         _ldata = {
             "source_system_name": self._source_system_name,
@@ -184,7 +183,11 @@ class DlxLogger:
         """
         Returns the handler for displaying to the console
 
-        :return:
+        Raises:
+            Exception: [description]
+
+        Returns:
+            [type]: [description]
         """
         try:
             console_handler = logging.StreamHandler(sys.stdout)
@@ -199,7 +202,11 @@ class DlxLogger:
         """
         Returns handler for writing to a file
 
-        :return:
+        Raises:
+            Exception: [description]
+
+        Returns:
+            [type]: [description]
         """
         try:
             file_handler = TimedRotatingFileHandler(self._full_log_file_name, when='midnight')
@@ -213,6 +220,12 @@ class DlxLogger:
     def _get_kafka_handler(self):
         """
         Write to Kafka
+
+        Raises:
+            Exception: [description]
+
+        Returns:
+            [type]: [description]
         """
         try:
             bootstrap_servers = "ala09035.edp-prod.deluxe.com:9093,ala09036.edp-prod.deluxe.com:9093,ala09037.edp-prod.deluxe.com:9093"
@@ -228,7 +241,8 @@ class DlxLogger:
         """
         Returns the logger all configured ready to use
 
-        :return:
+        Returns:
+            [type]: [description]
         """
         logger = logging.getLogger(__name__)
         logger.setLevel(logging.DEBUG)

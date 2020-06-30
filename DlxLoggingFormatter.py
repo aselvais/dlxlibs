@@ -5,15 +5,20 @@ import re
 class DlxLoggingFormatter(Formatter):
     """
     Subclassing the default logging.Formatter
+
+    Args:
+        Formatter ([type]): [description]
     """
 
     def format(self, record):
         """
-        Removes carriage return from the msg
-        and custom formating
-        
-        :param record:
-        :return:
+        Removes carriage return from the msg and custom formating
+
+        Args:
+            record ([type]): [description]
+
+        Returns:
+            [type]: [description]
         """
         if re.match('^\{', record.msg):
             try:

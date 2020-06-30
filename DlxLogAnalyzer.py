@@ -5,8 +5,10 @@ from math import floor
 
 class DlxLogAnalyzer:
     """
-    Class for analyzing the log files in JSON format
-    produced by the DlxLogger
+    Class for analyzing the log files in JSON format produced by the DlxLogger
+
+    Returns:
+        [type]: [description]
     """
 
     _files = []
@@ -16,7 +18,9 @@ class DlxLogAnalyzer:
     def __init__(self, files=[]):
         """
         Constructor
-        :param files: array of filenames contained in the logs dir
+
+        Args:
+            files (list, optional): array of filenames contained in the logs dir. Defaults to [].
         """
         self._files = files
         self._df = self._read_log_files(files)
@@ -26,6 +30,13 @@ class DlxLogAnalyzer:
     def _read_log_files(self, files=[], dirr='logs/'):
         """
         Read log files and return a dataframe
+
+        Args:
+            files (list, optional): [description]. Defaults to [].
+            dirr (str, optional): [description]. Defaults to 'logs/'.
+
+        Returns:
+            [type]: [description]
         """
         frames = []
         for thefile in files:
@@ -34,7 +45,16 @@ class DlxLogAnalyzer:
             frames.append(pd.read_json(fullpath, lines=True))
         return pd.concat(frames)
 
+
     def _process_df(self, df):
+        """
+
+        Args:
+            df ([type]): [description]
+
+        Returns:
+            [type]: [description]
+        """
         df.drop_duplicates()
 
         self.convertColumns(df, 'date', ['asctime'], ['asctimeDt'])
@@ -45,15 +65,23 @@ class DlxLogAnalyzer:
 
         return df.sort_values(by='created')
 
+
     def get_logs_df(self):
         """
         Returns the dataframe containing the logs
+
+        Returns:
+            [type]: [description]
         """
         return self._df
-    
+
+
     def get_simple_df(self):
         """
         Returns a simplified dataframe with the data
+
+        Returns:
+            [type]: [description]
         """
         return self._df[[
             'asctimeDt', 
@@ -68,15 +96,15 @@ class DlxLogAnalyzer:
     
     
     def convertColumns(self, data, to_type='date', columns=[], newcolmns=None):
-        '''
+        """
         Convert column to another type
 
-        :param data: Dataframe
-        :param to_type: To type date|str|yn|yesno|num|ms2str
-        :param columns: Array of column
-        :param newcolmns: Array of new columns to create, or None if we replace the current one
-        :return: Void
-        '''
+        Args:
+            data ([type]): Dataframe
+            to_type (str, optional): To type date|str|yn|yesno|num|ms2str. Defaults to 'date'.
+            columns (list, optional): Array of column. Defaults to [].
+            newcolmns ([type], optional): Array of new columns to create, or None if we replace the current one. Defaults to None.
+        """
         idx=0
         for i in columns:
             if to_type == 'date':
