@@ -65,6 +65,7 @@ class DlxLogger:
     _table_name = "logs"
     _env = "dev"
 
+
     def __init__(
         self, 
         app_name="", 
