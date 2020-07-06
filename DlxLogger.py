@@ -1,3 +1,9 @@
+"""
+Main class for logging.
+This class is 100% compatible with the default Python logging class
+and make it easy to setup handlers for console, file and kafka.
+The Kafka handler should be used in production only if possible.
+"""
 import logging
 import sys
 import os
@@ -71,6 +77,8 @@ class DlxLogger:
         ):
         """
         Constructor initializing some base vars
+        @todo Make this a singleton
+        @todo Use the json config file and override the default params
 
         Args:
             app_name (str, optional): Application/logger name. Defaults to "".
@@ -201,6 +209,7 @@ class DlxLogger:
     def _get_file_handler(self):
         """
         Returns handler for writing to a file
+        @todo Add check on the log folder
 
         Raises:
             Exception: [description]

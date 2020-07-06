@@ -1,3 +1,8 @@
+"""
+Subclass of the default logging.Formatter
+for cleaning up the data going through the message and args
+parameters
+"""
 from logging import Formatter
 import json
 import re

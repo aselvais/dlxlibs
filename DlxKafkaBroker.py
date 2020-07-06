@@ -1,3 +1,9 @@
+"""
+Kafka broker used by the Kafka Handler class.
+It contains the configuration for connecting to Kafka.
+Important: You will need to setup the Kerberos authentication to be able to
+send data to Kafka.
+"""
 from kafka import KafkaProducer
 import json
 import os

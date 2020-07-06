@@ -1,3 +1,6 @@
+"""
+Extends the StreamHandler pushing data to Kafka
+"""
 from logging import StreamHandler
 from dlxlibs.DlxKafkaBroker import DlxKafkaBroker
 

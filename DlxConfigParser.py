@@ -1,4 +1,9 @@
-
+"""
+Class for parsing the generic config file.
+The config file (if present) is used to pass config parameters to the
+DLXlibraries.
+For example, configuring the logger. 
+"""
 
 class DlxConfigParser:
 

@@ -1,3 +1,6 @@
+"""
+Abstraction layer to use HDFS on the EDP. 
+"""
 from datetime import datetime
 import re
 from dlxlibs.DlxLogger import DlxLogger
