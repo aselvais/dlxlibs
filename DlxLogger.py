@@ -48,7 +48,7 @@ class DlxLogger:
     _log_dir = "//..//logs//"
     _log_ext = "log"
     _full_log_file_name = ""
-    _formatter = DlxLoggingFormatter("%(asctime)s — %(name)s — %(levelname)s — %(message)s")
+    _formatter = DlxLoggingFormatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
     _username = ''
     _homedir = ''
     _hostname = ''
@@ -124,7 +124,7 @@ class DlxLogger:
             DlxLoggingFormatter: logging.Formatter
         """
         FORMATTERS = {
-            'default': "%(asctime)s — %(name)s — %(levelname)s — %(message)s",
+            'default': "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
             'csv': '"'+'","'.join(self._get_log_schema('values'))+'"',
             'json': json.dumps(self._get_log_schema())
         }
