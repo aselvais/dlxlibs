@@ -1,4 +1,5 @@
 """
+\defgroup Logging
 Subclass of the default logging.Formatter
 for cleaning up the data going through the message and args
 parameters

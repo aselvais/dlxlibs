@@ -1,4 +1,5 @@
 """
+\defgroup Version control
 Abstraction layer to access Bitbucket from Python. 
 """
 from dlxlibs.DlxLogger import DlxLogger

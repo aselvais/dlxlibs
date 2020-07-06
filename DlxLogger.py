@@ -1,4 +1,5 @@
 """
+\defgroup Logging
 Main class for logging.
 This class is 100% compatible with the default Python logging class
 and make it easy to setup handlers for console, file and kafka.

@@ -1,4 +1,5 @@
 """
+\defgroup Logging
 Extends the StreamHandler pushing data to Kafka
 """
 from logging import StreamHandler

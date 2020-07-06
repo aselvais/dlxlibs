@@ -1,4 +1,5 @@
 """
+\defgroup Logging
 Kafka broker used by the Kafka Handler class.
 It contains the configuration for connecting to Kafka.
 Important: You will need to setup the Kerberos authentication to be able to
