@@ -28,17 +28,6 @@ class DlxConfigParser:
     _file = None
 
 
-    def _log(self, msg):
-        """
-        Temporary message logger for this class
-
-        Args:
-            msg (str): Message to log
-        """
-        #print(msg)
-        pass
-
-
     def __init__(self, env="dev"):
         """
         Class parsing the (optional) configuration file for the DLX modules.
@@ -55,7 +44,18 @@ class DlxConfigParser:
         self._file = Path(self._config_fullpath)
         if self._file.is_file():
             self._parse_config_file()
-        
+
+
+    def _log(self, msg):
+        """
+        Temporary message logger for this class
+
+        Args:
+            msg (str): Message to log
+        """
+        #print(msg)
+        pass
+
 
     def _parse_config_file(self):
         """

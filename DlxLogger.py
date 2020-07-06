@@ -23,6 +23,7 @@ except:
 from logging.handlers import TimedRotatingFileHandler
 from dlxlibs.DlxLoggingFormatter import DlxLoggingFormatter
 from dlxlibs.DlxKafkaLoggingHandler import DlxKafkaLoggingHandler
+from dlxlibs.DlxConfigParser import DlxConfigParser
 
 
 class DlxLogger:
@@ -98,6 +99,10 @@ class DlxLogger:
         # @todo : get this from the env where it is running
         # The idea is to make it "prod" when it runs in the context of Rundeck
         self._env = env
+
+        # @todo make this effective
+        _dlxConfigParser = DlxConfigParser()
+        config = _dlxConfigParser.get_config("DlxLogger")
 
         if app_name == "":
             try:
