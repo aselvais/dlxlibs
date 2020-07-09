@@ -1,5 +1,5 @@
 var classdlxlibs_1_1_dlx_config_parser_1_1_dlx_config_parser =
 [
-    [ "__init__", "classdlxlibs_1_1_dlx_config_parser_1_1_dlx_config_parser.html#a3abff7ef19943728f91cad85681a1e12", null ],
-    [ "get_config", "classdlxlibs_1_1_dlx_config_parser_1_1_dlx_config_parser.html#ad10a1bdd056d4a8a36c4c0ff4c654736", null ]
+    [ "__init__", "classdlxlibs_1_1_dlx_config_parser_1_1_dlx_config_parser.html#a8ca33cf4f31cc0dfc3367965768f427a", null ],
+    [ "get_config", "classdlxlibs_1_1_dlx_config_parser_1_1_dlx_config_parser.html#a4d31307b62ce2be51088b451defe7ce6", null ]
 ];

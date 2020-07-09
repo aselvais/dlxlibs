@@ -99,8 +99,11 @@ Classes</h2></td></tr>
 <div class="textblock"><pre class="fragment">\defgroup General
 Class for parsing the generic config file.
 The config file (if present) is used to pass config parameters to the
-DLXlibraries.
-For example, configuring the logger. 
+DLXlibraries. For example, configuring the logger.
+
+The configuration file name has to be in the root directory of the project and named:
+ - dlxconfig-{end}.json
+where {env} is the environment name (dev | stage | prod)
 </pre> </div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

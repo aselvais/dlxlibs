@@ -56,28 +56,28 @@ class DlxLogger:
     _log_dir = "//..//logs//"
     _log_ext = "log"
     _full_log_file_name = ""
-    _formatter = DlxLoggingFormatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+    _formatter = DlxLoggingFormatter(
+        "%(asctime)s - %(name)s - %(levelname)s - %(message)s")
     _username = ''
     _homedir = ''
     _hostname = ''
-    _handlers='kfc'
+    _handlers = 'kfc'
     _source_system_name = "logs"
     _schema_name = "logs"
     _table_name = "logs"
     _env = "dev"
 
-
     def __init__(
-        self, 
-        app_name="", 
-        format="json", 
-        log_ext="log", 
+        self,
+        app_name="",
+        format="json",
+        log_ext="log",
         handlers="kfc",
         source_system_name="logs",
         schema_name="logs",
         table_name="logs",
         env="dev"
-        ):
+    ):
         """
         Constructor initializing some base vars
         @todo Make this a singleton
@@ -107,7 +107,8 @@ class DlxLogger:
         if app_name == "":
             try:
                 caller = sys._getframe(1)
-                self._app_name = os.path.basename(caller.f_globals['__file__']).split(".")[0]
+                self._app_name = os.path.basename(
+                    caller.f_globals['__file__']).split(".")[0]
             except:
                 self._app_name = "default"
         else:
@@ -115,7 +116,8 @@ class DlxLogger:
         self._log_format = format
         self._log_ext = log_ext
         self._handlers = handlers
-        self._full_log_file_name = os.path.dirname(os.path.realpath(__file__)) + self._log_dir + self._app_name + '.' + self._log_ext
+        self._full_log_file_name = os.path.dirname(os.path.realpath(
+            __file__)) + self._log_dir + self._app_name + '.' + self._log_ext
         self._formatter = self._get_format()
         try:
             self._username = getpass.getuser()
@@ -130,7 +132,6 @@ class DlxLogger:
         except:
             self._hostname = ''
 
-
     def _get_format(self):
         """
         Get log formatter
@@ -144,7 +145,6 @@ class DlxLogger:
             'json': json.dumps(self._get_log_schema())
         }
         return DlxLoggingFormatter(FORMATTERS[self._log_format])
-
 
     def _get_log_schema(self, type="all"):
         """
@@ -161,26 +161,30 @@ class DlxLogger:
             "schema_name": self._schema_name,
             "table_name": self._table_name,
             "env": self._env,
-            "asctime": '%(asctime)s',                   ## | eg: "asctime": "2020-05-01 08:51:46,374"
-            "levelname": '%(levelname)s',               ## | eg: "levelname": "DEBUG"
-            "levelno": '%(levelno)s',                   ## | eg: "levelno": "10"
-            "message": '%(message)s',                   ## | eg: "message": "a debug message"
-            "module": '%(module)s',                     ## | eg: "module": "loggertest"
-            "filename": '%(filename)s',                 ## | eg: "filename": "loggertest.py"
-            "homedir": self._homedir,                   ## | eg: "homedir": ""
-            "pathname": '%(pathname)s',                 ## | eg: "pathname": "C:/Users/T442512/PycharmProjects/spark-template-project/loggertest.py"
-            "created": '%(created)f',                   ## | eg: "created": "1588337506.374059"
-            "msecs": '%(msecs)d',                       ## | eg: "msecs": "374"
-            "relativeCreated": '%(relativeCreated)d',   ## | eg: "relativeCreated": "65"
-            "name": '%(name)s',                         ## | eg: "name": "root"
-            "username": self._username,                 ## | eg: "username": ""
-            "hostname": self._hostname,                 ## | eg: "hostname": ""
-            "funcName": '%(funcName)s',                 ## | eg: "funcName": "<module>"
-            "lineno": '%(lineno)d',                     ## | eg: "lineno": "6"
-            "process": '%(process)d',                   ## | eg: "process": "14744"
-            "processName": '%(processName)s',           ## | eg: "processName": "MainProcess"
-            "thread": '%(thread)d',                     ## | eg: "thread": "1792"
-            "threadName": '%(threadName)s',             ## | eg: "threadName": "MainThread"
+            # | eg: "asctime": "2020-05-01 08:51:46,374"
+            "asctime": '%(asctime)s',
+            "levelname": '%(levelname)s',  # | eg: "levelname": "DEBUG"
+            "levelno": '%(levelno)s',  # | eg: "levelno": "10"
+            "message": '%(message)s',  # | eg: "message": "a debug message"
+            "module": '%(module)s',  # | eg: "module": "loggertest"
+            "filename": '%(filename)s',  # | eg: "filename": "loggertest.py"
+            "homedir": self._homedir,  # | eg: "homedir": ""
+            # | eg: "pathname": "C:/Users/T442512/PycharmProjects/spark-template-project/loggertest.py"
+            "pathname": '%(pathname)s',
+            "created": '%(created)f',  # | eg: "created": "1588337506.374059"
+            "msecs": '%(msecs)d',  # | eg: "msecs": "374"
+            # | eg: "relativeCreated": "65"
+            "relativeCreated": '%(relativeCreated)d',
+            "name": '%(name)s',  # | eg: "name": "root"
+            "username": self._username,  # | eg: "username": ""
+            "hostname": self._hostname,  # | eg: "hostname": ""
+            "funcName": '%(funcName)s',  # | eg: "funcName": "<module>"
+            "lineno": '%(lineno)d',  # | eg: "lineno": "6"
+            "process": '%(process)d',  # | eg: "process": "14744"
+            # | eg: "processName": "MainProcess"
+            "processName": '%(processName)s',
+            "thread": '%(thread)d',  # | eg: "thread": "1792"
+            "threadName": '%(threadName)s',  # | eg: "threadName": "MainThread"
             "args": '%(args)s',
             "exc_info": '%(exc_info)s',
             "exc_text": '%(exc_text)s',
@@ -192,7 +196,6 @@ class DlxLogger:
             return _ldata.keys()
         else:
             return _ldata
-
 
     def _get_console_handler(self):
         """
@@ -212,7 +215,6 @@ class DlxLogger:
             raise Exception('Console handler init failed')
             return None
 
-
     def _get_file_handler(self):
         """
         Returns handler for writing to a file
@@ -225,13 +227,14 @@ class DlxLogger:
             [type]: [description]
         """
         try:
-            file_handler = TimedRotatingFileHandler(self._full_log_file_name, when='midnight')
+            file_handler = TimedRotatingFileHandler(
+                self._full_log_file_name, when='midnight')
             file_handler.setFormatter(self._formatter)
             return file_handler
         except:
-            raise Exception('File handler init failed. Check that the "logs" directory exists in the root of your project.')
+            raise Exception(
+                'File handler init failed. Check that the "logs" directory exists in the root of your project.')
             return None
-    
 
     def _get_kafka_handler(self):
         """
@@ -245,13 +248,13 @@ class DlxLogger:
         """
         try:
             bootstrap_servers = "ala09035.edp-prod.deluxe.com:9093,ala09036.edp-prod.deluxe.com:9093,ala09037.edp-prod.deluxe.com:9093"
-            _dlxKafkaLoggingHandler = DlxKafkaLoggingHandler(bootstrap_servers, 'log-loggers')
+            _dlxKafkaLoggingHandler = DlxKafkaLoggingHandler(
+                bootstrap_servers, 'log-loggers')
             _dlxKafkaLoggingHandler.setFormatter(self._formatter)
             return _dlxKafkaLoggingHandler
         except:
             raise Exception('Kafka handler init failed')
             return None
-
 
     def get_logger(self):
         """
@@ -267,17 +270,17 @@ class DlxLogger:
 
         if re.search('c', self._handlers):
             ch = self._get_console_handler()
-            if ch != None:
+            if ch is not None:
                 logger.addHandler(ch)
-        
+
         if re.search('f', self._handlers):
             fh = self._get_file_handler()
-            if fh != None:
+            if fh is not None:
                 logger.addHandler(fh)
-        
+
         if re.search('k', self._handlers):
             kh = self._get_kafka_handler()
-            if kh != None:
+            if kh is not None:
                 logger.addHandler(kh)
 
         # with this pattern, it's rarely necessary to propagate the error up to parent
