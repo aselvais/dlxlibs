@@ -1,9 +1,16 @@
+"""
+\defgroup Logging
+Extends the StreamHandler pushing data to Kafka
+"""
 from logging import StreamHandler
 from dlxlibs.DlxKafkaBroker import DlxKafkaBroker
 
 class DlxKafkaLoggingHandler(StreamHandler):
     """
     Logging handler for Kafka streaming
+
+    Args:
+        StreamHandler ([type]): [description]
     """
 
 
@@ -11,8 +18,9 @@ class DlxKafkaLoggingHandler(StreamHandler):
         """
         Init the kafka handler
 
-        :param bootstrap_servers: Kafka servers to use
-        :param topic: Topic name
+        Args:
+            bootstrap_servers ([type]): Kafka servers to use
+            topic ([type]): Topic name
         """
         StreamHandler.__init__(self)
         self.topic = topic
@@ -23,7 +31,8 @@ class DlxKafkaLoggingHandler(StreamHandler):
         """
         Management of msg emmition from the logging system
 
-        :param record: Record
+        Args:
+            record ([type]): Record
         """
         if record.name == 'kafka':
             return

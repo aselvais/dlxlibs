@@ -1,5 +1,11 @@
+"""
+\defgroup Version control
+Abstraction layer to access Bitbucket from Python. 
+"""
 from dlxlibs.DlxLogger import DlxLogger
 from dlxlibs.DlxBash import DlxBash
+import git
+
 
 _logger = DlxLogger().get_logger()
 
