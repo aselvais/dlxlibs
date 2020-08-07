@@ -14,16 +14,24 @@ class DlxSparkSftp:
     Initialize the class and some required parameters.
 
     Args:
-        host (str, optional): sFTP Host. Defaults to "".
-        username (str, optional): sFTP Username. Defaults to "".
-        password (str, optional): sFTP password. Defaults to "".
-        file_type (str, optional): File type. Defaults to "csv".
-        delimiter (str, optional): Delimiter. Defaults to "|".
-        quote (str, optional): Are string in quotes. Defaults to "\"".
-        escape (str, optional): Escaping character. Defaults to "\\".
-        multiLine (str, optional): Is multiline. Defaults to "true".
-        infer_schema (str, optional): Do we infer the schema. Defaults to "false".
-        header (str, optional): Does the file have a header. Defaults to "true".
+        host (str, optional): SFTP Host. Defaults to "".
+        username (str, optional): SFTP Server Username. Defaults to "".
+        password (str, optional): SFTP Server Password. Defaults to "".
+        port (str, optional): port: Port in which SFTP server is running. Defaults to 22.
+        file_type (str, optional): Type of the file. Supported types are csv, txt, json, avro and parquet. Defaults to "csv".
+        delimiter (str, optional): Set the field delimiter. Applicable only for csv fileType. Defaults to ",".
+        quote (str, optional): Set the quote character. Applicable only for csv fileType. Defaults to "\"".
+        escape (str, optional): Set the escape character. Applicable only for csv fileType. Defaults to "\\".
+        multiLine (str, optional): Set the multiline. Applicable only for csv fileType. Defaults to "true".
+        infer_schema (str, optional): InferSchema from the file content. Currently applicable only for csv fileType. Defaults to "false".
+        header (str, optional): Applicable only for csv fileType. Is the first row in CSV file is header. Defaults to "true".
+        pem (str, optional): Location of PEM file. Either pem or password has to be specified. Defaults to "password".
+        pemPassphrase (str, optional): Passphrase for PEM file. Defaults to "".
+        codec (str, optional):  Applicable only for csv fileType. Compression codec to use when saving to file.
+                                Should be the fully qualified name of a class implementing
+                                org.apache.hadoop.io.compress.CompressionCodec or one of case-insensitive
+                                shorten names (bzip2, gzip, lz4, and snappy). Defaults to no compression
+                                when a codec is not specified.
     """
 
     _sc = None
@@ -32,6 +40,7 @@ class DlxSparkSftp:
     _host = ""
     _username = ""
     _password = ""
+    _port = ""
     _file_type = ""
     _delimiter = ""
     _quote = ""
@@ -40,26 +49,38 @@ class DlxSparkSftp:
     _infer_schema = ""
     _header = ""
     _file_path = ""
+    _pem = ""
+    _pem_passphrase = ""
+    _codec = ""
 
-    def __init__(self, host="", username="", password="", file_type="csv", delimiter=",", quote="\"", escape="\\", multiLine="true", infer_schema="false", header="true"):
+    def __init__(self, host="", username="", password="", port='22', file_type="csv", delimiter=",", quote="\"", escape="\\", multiLine="true", infer_schema="false", header="true", pem="password", pem_passphrase="", codec=""):
         """
         Initialize the class and some required parameters.
 
         Args:
-            host (str, optional): sFTP Host. Defaults to "".
-            username (str, optional): sFTP Username. Defaults to "".
-            password (str, optional): sFTP password. Defaults to "".
-            file_type (str, optional): File type. Defaults to "csv".
-            delimiter (str, optional): Delimiter. Defaults to ",".
-            quote (str, optional): Are string in quotes. Defaults to "\"".
-            escape (str, optional): Escaping character. Defaults to "\\".
-            multiLine (str, optional): Is multiline. Defaults to "true".
-            infer_schema (str, optional): Do we infer the schema. Defaults to "false".
-            header (str, optional): Does the file have a header. Defaults to "true".
+            host (str, optional): SFTP Host. Defaults to "".
+            username (str, optional): SFTP Server Username. Defaults to "".
+            password (str, optional): SFTP Server Password. Defaults to "".
+            port (str, optional): port: Port in which SFTP server is running. Defaults to 22.
+            file_type (str, optional): Type of the file. Supported types are csv, txt, json, avro and parquet. Defaults to "csv".
+            delimiter (str, optional): Set the field delimiter. Applicable only for csv fileType. Defaults to ",".
+            quote (str, optional): Set the quote character. Applicable only for csv fileType. Defaults to "\"".
+            escape (str, optional): Set the escape character. Applicable only for csv fileType. Defaults to "\\".
+            multiLine (str, optional): Set the multiline. Applicable only for csv fileType. Defaults to "true".
+            infer_schema (str, optional): InferSchema from the file content. Currently applicable only for csv fileType. Defaults to "false".
+            header (str, optional): Applicable only for csv fileType. Is the first row in CSV file is header. Defaults to "true".
+            pem (str, optional): Location of PEM file. Either pem or password has to be specified. Defaults to "password".
+            pemPassphrase (str, optional): Passphrase for PEM file. Defaults to "".
+            codec (str, optional):  Applicable only for csv fileType. Compression codec to use when saving to file.
+                                    Should be the fully qualified name of a class implementing
+                                    org.apache.hadoop.io.compress.CompressionCodec or one of case-insensitive
+                                    shorten names (bzip2, gzip, lz4, and snappy). Defaults to no compression
+                                    when a codec is not specified.
         """
         self._host = host
         self._username = username
         self._password = password
+        self._port = port
         self._file_type = file_type
         self._delimiter = delimiter
         self._quote = quote
@@ -67,6 +88,9 @@ class DlxSparkSftp:
         self._multiLine = multiLine
         self._infer_schema = infer_schema
         self._header = header
+        self._pem = pem
+        self._pem_passphrase = pem_passphrase
+        self._codec = codec
 
     def connect(self):
         """
@@ -90,6 +114,7 @@ class DlxSparkSftp:
             .option("host", self._host)\
             .option("username", self._username)\
             .option("password", self._password)\
+            .option("port", self._port)\
             .option("fileType", self._file_type)\
             .option("delimiter", self._delimiter)\
             .option("quote", self._quote)\
@@ -98,6 +123,10 @@ class DlxSparkSftp:
             .option("inferSchema", self._infer_schema)\
             .option("header", self._header)\
             .load(self._file_path)
+        # .option("pem", self._pem)\
+        # .option("pemPassphrase", self._pem_passphrase)\
+        # .option("codec", self._codec)\
+
 
     def show_df(self):
         """
