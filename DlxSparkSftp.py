@@ -99,16 +99,18 @@ class DlxSparkSftp:
         self._sc = SparkContext().getOrCreate()
         self._sqlContext = SQLContext(self._sc)
 
-    def get_file(self, file_path=""):
+    def get_file(self, file_path="", fileschemas=[], fixed_width_data=[]):
         """
         Get the file from the remote server and store the result in
         a spark dataframe (self._df)
 
         Args:
             file_path (str, optional): Full path to the file. Defaults to "".
+            fileschemas (list, optional): Only useful for fixed width files, contains the schema. Defaults to [].
+            fixed_width_data (list, optional): Only used for fixed width, contains the col width definitions. Defaults to [].
         """
         self._file_path = file_path
-        self._df = self._sqlContext\
+        df = self._sqlContext\
             .read\
             .format("com.springml.spark.sftp")\
             .option("host", self._host)\
@@ -126,7 +128,14 @@ class DlxSparkSftp:
         # .option("pem", self._pem)\
         # .option("pemPassphrase", self._pem_passphrase)\
         # .option("codec", self._codec)\
-
+        if len(fileschemas) == 0:
+            self._df = df
+        else:
+            argss = []
+            for ii in range(len(fileschemas)):
+                argss.append(df.value.substr(int(fixed_width_data[ii][0]), int(fixed_width_data[ii][1])).alias(fileschemas[ii][2]))
+            ddf = df.select(argss)
+            self._df = ddf
 
     def show_df(self):
         """
