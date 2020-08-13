@@ -92,12 +92,23 @@ class DlxSparkSftp:
         self._pem_passphrase = pem_passphrase
         self._codec = codec
 
-    def connect(self):
+    def connect(self, sc=None, sqlContext=None):
         """
-        Connect to spark
+        Connect to spark. It will create the context or use the one
+        passed as param.
+
+        Args:
+            sc (SparkContext, optional): pass spark if already initialized. Defaults to None.
+            sqlContext (SQLContext, optional): pass sqlContext if available. Defaults to None.
         """
-        self._sc = SparkContext().getOrCreate()
-        self._sqlContext = SQLContext(self._sc)
+        if sc is None:
+            self._sc = SparkContext().getOrCreate()
+        else:
+            self._sc = sc
+        if sqlContext is None:
+            self._sqlContext = SQLContext(self._sc)
+        else:
+            self._sqlContext = sqlContext
 
     def get_file(self, file_path="", fileschemas=[], fixed_width_data=[]):
         """
