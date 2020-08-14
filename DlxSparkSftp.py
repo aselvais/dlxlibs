@@ -139,7 +139,7 @@ class DlxSparkSftp:
         # .option("pem", self._pem)\
         # .option("pemPassphrase", self._pem_passphrase)\
         # .option("codec", self._codec)\
-        if len(fileschemas) == 0:
+        if len(fixed_width_data) == 0:
             self._df = df
         else:
             argss = []
