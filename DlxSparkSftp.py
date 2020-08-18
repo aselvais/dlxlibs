@@ -1,6 +1,13 @@
 """
 Generic class for connecting to sFTP from spark.
 
+Example of usage:
+    _dlxSparkSftp = DlxSparkSftp(e['host'], e['username'], pii_decypher(os.environ["KEY"], e['password']).decode(), e['port'], e['file_type'])
+    _dlxSparkSftp.connect()
+    _dlxSparkSftp.get_file(e['filename'], e['fileschemas'], e['fixed_width_data'])
+    _dlxSparkSftp.show_df()
+    _dlxSparkSftp.end()
+
 You will have to make sure the following jars are available:
     - spark-sftp_2.11-1.1.3.jar
     - sftp.client-1.0.3.jar
