@@ -5,6 +5,8 @@ It contains the configuration for connecting to Kafka.
 Important: You will need to setup the Kerberos authentication to be able to
 send data to Kafka.
 """
+import os
+import sys
 
 if os.environ["USER"] == 'rundeckadmin':
   os.environ["PYTHONPATH"] = "/usr/lib/python3.6/site-packages"
@@ -13,7 +15,6 @@ if os.environ["USER"] == 'rundeckadmin':
 
 from kafka import KafkaProducer
 import json
-import os
 import ssl
 import socket
 
