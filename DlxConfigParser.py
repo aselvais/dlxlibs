@@ -9,7 +9,7 @@ The configuration file name has to be in the root directory of the project and n
 where {env} is the environment name (dev | stage | prod)
 """
 import os
-imoprt sys
+import sys
 if os.environ["USER"] == 'rundeckadmin':
   os.environ["PYTHONPATH"] = "/usr/lib/python3.6/site-packages"
   sys.path.append("/usr/lib/python3.6/site-packages")
