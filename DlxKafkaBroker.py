@@ -5,13 +5,19 @@ It contains the configuration for connecting to Kafka.
 Important: You will need to setup the Kerberos authentication to be able to
 send data to Kafka.
 """
+
+if os.environ["USER"] == 'rundeckadmin':
+  os.environ["PYTHONPATH"] = "/usr/lib/python3.6/site-packages"
+  sys.path.append("/usr/lib/python3.6/site-packages")
+  sys.path.append("/usr/local/lib/python3.6/site-packages")
+
 from kafka import KafkaProducer
 import json
 import os
 import ssl
 import socket
 
-_ = os.environ["KRB5_CLIENT_KTNAME"] = "t442512.keytab"
+_ = os.environ["KRB5_CLIENT_KTNAME"] = "rundeckadmin.keytab"
 ssl_context = ssl.create_default_context(cafile='/etc/pki/tls/certs/ca-bundle.crt')
 ssl_context.options |= (ssl.PROTOCOL_TLSv1 | ssl.OP_NO_TLSv1_1 | ssl.OP_NO_TLSv1_2 | ssl.OP_NO_COMPRESSION)
 
