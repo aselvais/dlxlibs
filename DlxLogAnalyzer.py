@@ -90,7 +90,7 @@ class DlxLogAnalyzer:
             [type]: [description]
         """
         return self._df[[
-            'asctimeDt', 
+            'asctimeDt',
             'relativeCreated',
             'mselapsed',
             'relativeCreatedFormated',
@@ -98,6 +98,8 @@ class DlxLogAnalyzer:
             'message',
             'funcName',
             'filename',
+            'lineno', 
+            'process'
         ]]
     
     
