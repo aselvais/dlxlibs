@@ -16,7 +16,7 @@ import re
 try:
     # @todo : Find another cleaner way to make this generic
     sys.path.append("/home/cdsw/")
-    sys.path.append("/home/cdsw/code/sparkcode/lcllibs/")
+    sys.path.append("/home/cdsw/code/libs/")
 except:
     pass
 
