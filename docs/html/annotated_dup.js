@@ -9,6 +9,7 @@ var annotated_dup =
       [ "DlxKafkaLoggingHandler", "namespacedlxlibs_1_1_dlx_kafka_logging_handler.html", "namespacedlxlibs_1_1_dlx_kafka_logging_handler" ],
       [ "DlxLogAnalyzer", "namespacedlxlibs_1_1_dlx_log_analyzer.html", "namespacedlxlibs_1_1_dlx_log_analyzer" ],
       [ "DlxLogger", "namespacedlxlibs_1_1_dlx_logger.html", "namespacedlxlibs_1_1_dlx_logger" ],
-      [ "DlxLoggingFormatter", "namespacedlxlibs_1_1_dlx_logging_formatter.html", "namespacedlxlibs_1_1_dlx_logging_formatter" ]
+      [ "DlxLoggingFormatter", "namespacedlxlibs_1_1_dlx_logging_formatter.html", "namespacedlxlibs_1_1_dlx_logging_formatter" ],
+      [ "DlxSparkSftp", "namespacedlxlibs_1_1_dlx_spark_sftp.html", "namespacedlxlibs_1_1_dlx_spark_sftp" ]
     ] ]
 ];
