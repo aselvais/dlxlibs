@@ -98,8 +98,9 @@ class DlxLogAnalyzer:
             'message',
             'funcName',
             'filename',
-            'lineno', 
-            'process'
+            'lineno',
+            'process',
+            'args',
         ]]
     
     
