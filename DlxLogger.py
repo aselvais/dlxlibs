@@ -34,7 +34,7 @@ class DlxLogger:
         app_name (str, optional): Application/logger name. Defaults to "".
         format (str, optional): csv | json | default - Log format see FORMATTERS. Defaults to "json".
         log_ext (str, optional): Log file extension. Defaults to "log".
-        handlers (str, optional): Handlers to setup. k=Kafka, f=file, c=console. Defaults to "kfc".
+        handlers (str, optional): Handlers to setup. k=Kafka, f=file, c=console. Defaults to "fc".
         source_system_name (str, optional): Name of the source system or app. Defaults to "logs".
         schema_name (str, optional): Schema name. Defaults to "logs".
         table_name (str, optional): Table name. Defaults to "logs".
@@ -61,7 +61,7 @@ class DlxLogger:
     _username = ''
     _homedir = ''
     _hostname = ''
-    _handlers = 'kfc'
+    _handlers = 'fc'
     _source_system_name = "logs"
     _schema_name = "logs"
     _table_name = "logs"
@@ -72,7 +72,7 @@ class DlxLogger:
         app_name="",
         format="json",
         log_ext="log",
-        handlers="kfc",
+        handlers="fc",
         source_system_name="logs",
         schema_name="logs",
         table_name="logs",
@@ -87,7 +87,7 @@ class DlxLogger:
             app_name (str, optional): Application/logger name. Defaults to "".
             format (str, optional): csv | json | default - Log format see FORMATTERS. Defaults to "json".
             log_ext (str, optional): Log file extension. Defaults to "log".
-            handlers (str, optional): Handlers to setup. k=Kafka, f=file, c=console. Defaults to "kfc".
+            handlers (str, optional): Handlers to setup. k=Kafka, f=file, c=console. Defaults to "fc".
             source_system_name (str, optional): Name of the source system or app. Defaults to "logs".
             schema_name (str, optional): Schema name. Defaults to "logs".
             table_name (str, optional): Table name. Defaults to "logs".

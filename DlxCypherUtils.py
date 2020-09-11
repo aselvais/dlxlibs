@@ -1,16 +1,29 @@
 #!/usr/bin/python3
 """
 Utility for encrypting and decrypting strings.
+
+To use this library, you will need to have a key stored in the KEY var at the OS env level.
+You can instanciate this var in the CDSW modifying the settings of your project and adding an
+environment variable.
+
 You need 2 arguments:
 
-    d|e : D for decrypt, e for encrypt
-    str: The string to encore or decode
+    d|e|g : D for decrypt, e for encrypt, g for generating a key
+    str: The string to encore or decode (not relevant for g)
+
+Example encrypting a string:
+
+    {0} e MyPassword
 """
 import os
 from cryptography.fernet import Fernet
 import sys
 
-key = os.environ["KEY"]
+try:
+    key = os.environ["KEY"]
+except:
+    print('The key is missing, please generate a key and place it in the os KEY env var.')
+    exit()
 cipher_suite = Fernet(key)
 
 
@@ -46,6 +59,10 @@ def encrypt(v):
         return ""
 
 
+def get_generated_key():
+    return Fernet.generate_key().decode()
+
+
 if __name__ == '__main__':
     try:
         if sys.argv[1] == 'd':
@@ -54,14 +71,21 @@ if __name__ == '__main__':
         elif sys.argv[1] == 'e':
             print("\nEncrypted string from \"" + sys.argv[2] + "\":")
             print(encrypt(sys.argv[2]))
+        elif sys.argv[1] == 'g':
+            print("\nGenerated key: ")
+            print(get_generated_key())
         print("")
     except Exception:
         print("""
 Utility for encrypting and decrypting strings.
+To use this library, you will need to have a key stored in the KEY var at the OS env level.
+You can instanciate this var in the CDSW modifying the settings of your project and adding an
+environment variable.
+
 You need 2 arguments:
 
-    d|e : D for decrypt, e for encrypt
-    str: The string to encore or decode
+    d|e|g : D for decrypt, e for encrypt, g for generating a key
+    str: The string to encore or decode (not relevant for g)
 
 Example encrypting a string:
 
