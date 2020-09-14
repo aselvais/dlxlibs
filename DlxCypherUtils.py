@@ -3,7 +3,7 @@
 Utility for encrypting and decrypting strings.
 
 To use this library, you will need to have a key stored in the KEY var at the OS env level.
-You can instanciate this var in the CDSW modifying the settings of your project and adding an
+You can instantiate this var in the CDSW modifying the settings of your project and adding an
 environment variable.
 
 You need 2 arguments:
@@ -19,12 +19,14 @@ import os
 from cryptography.fernet import Fernet
 import sys
 
+cipher_suite = ""
+
 try:
     key = os.environ["KEY"]
+    cipher_suite = Fernet(key)
 except:
     print('The key is missing, please generate a key and place it in the os KEY env var.')
     exit()
-cipher_suite = Fernet(key)
 
 
 def decrypt(v=""):
@@ -79,7 +81,7 @@ if __name__ == '__main__':
         print("""
 Utility for encrypting and decrypting strings.
 To use this library, you will need to have a key stored in the KEY var at the OS env level.
-You can instanciate this var in the CDSW modifying the settings of your project and adding an
+You can instantiate this var in the CDSW modifying the settings of your project and adding an
 environment variable.
 
 You need 2 arguments:
