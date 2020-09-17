@@ -26,7 +26,7 @@ try:
     cipher_suite = Fernet(key)
 except:
     print('The key is missing, please generate a key and place it in the os KEY env var.')
-    exit()
+    # exit()
 
 
 def decrypt(v=""):
