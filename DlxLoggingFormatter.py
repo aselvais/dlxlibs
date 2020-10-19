@@ -26,19 +26,22 @@ class DlxLoggingFormatter(Formatter):
         Returns:
             [type]: [description]
         """
-        if re.match('^\{', record.msg):
-            try:
-                r = json.loads(record.msg)
-                ks = r.keys()
-                if 'command' in ks:
-                    record.command = r["command"]
-                if 'storagename' in ks:
-                    record.storagename = r["storagename"]
-                if 'count' in ks:
-                    record.count = r["count"]
-            except:
-                pass
-        else:
-            record.msg = re.sub(r'^\"|\"$', '', json.dumps(record.msg))
-            #record.exc_text = re.sub(r'^\"|\"$', '', json.dumps(record.exc_text))
+        try:
+            if re.match('^\{', record.msg):
+                try:
+                    r = json.loads(record.msg)
+                    ks = r.keys()
+                    if 'command' in ks:
+                        record.command = r["command"]
+                    if 'storagename' in ks:
+                        record.storagename = r["storagename"]
+                    if 'count' in ks:
+                        record.count = r["count"]
+                except:
+                    pass
+            else:
+                record.msg = re.sub(r'^\"|\"$', '', json.dumps(record.msg))
+                #record.exc_text = re.sub(r'^\"|\"$', '', json.dumps(record.exc_text))
+        except:
+            pass
         return super(DlxLoggingFormatter, self).format(record)
