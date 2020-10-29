@@ -80,7 +80,7 @@ fi
 
 ## Env Script Vars
 
-PROJ_NAME="datasnapshot"
+PROJ_NAME="rundeckexec"
 ENV_NAME="temporary"
 EXEC_PATH=`pwd ~`
 REPO_PATH=$EXEC_PATH
