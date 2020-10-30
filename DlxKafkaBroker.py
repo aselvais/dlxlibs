@@ -8,13 +8,15 @@ send data to Kafka.
 import os
 import sys
 
-if os.environ["USER"] == 'rundeckadmin':
-  os.environ["PYTHONPATH"] = "/usr/lib/python3.6/site-packages"
-  sys.path.append("/usr/lib/python3.6/site-packages")
-  sys.path.append("/usr/local/lib/python3.6/site-packages")
+try:
+    if os.environ["USER"] == 'rundeckadmin':
+        os.environ["PYTHONPATH"] = "/usr/lib/python3.6/site-packages"
+        sys.path.append("/usr/lib/python3.6/site-packages")
+        sys.path.append("/usr/local/lib/python3.6/site-packages")
+except:
+    pass
 
 from kafka import KafkaProducer
-import json
 import ssl
 import socket
 

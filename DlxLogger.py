@@ -22,7 +22,6 @@ except:
 
 from logging.handlers import TimedRotatingFileHandler
 from dlxlibs.DlxLoggingFormatter import DlxLoggingFormatter
-from dlxlibs.DlxKafkaLoggingHandler import DlxKafkaLoggingHandler
 from dlxlibs.DlxConfigParser import DlxConfigParser
 
 
@@ -279,6 +278,7 @@ class DlxLogger:
                 logger.addHandler(fh)
 
         if re.search('k', self._handlers):
+            from dlxlibs.DlxKafkaLoggingHandler import DlxKafkaLoggingHandler
             kh = self._get_kafka_handler()
             if kh is not None:
                 logger.addHandler(kh)

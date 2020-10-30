@@ -10,10 +10,15 @@ where {env} is the environment name (dev | stage | prod)
 """
 import os
 import sys
-if os.environ["USER"] == 'rundeckadmin':
-  os.environ["PYTHONPATH"] = "/usr/lib/python3.6/site-packages"
-  sys.path.append("/usr/lib/python3.6/site-packages")
-  sys.path.append("/usr/local/lib/python3.6/site-packages")
+
+try:
+    if os.environ["USER"] == 'rundeckadmin':
+        os.environ["PYTHONPATH"] = "/usr/lib/python3.6/site-packages"
+        sys.path.append("/usr/lib/python3.6/site-packages")
+        sys.path.append("/usr/local/lib/python3.6/site-packages")
+except:
+    pass
+
 from pathlib import Path
 import json
 
