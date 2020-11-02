@@ -82,7 +82,7 @@ fi
 
 PROJ_NAME="rundeckexec"
 ENV_NAME="temporary"
-EXEC_PATH=`pwd ~`
+EXEC_PATH=$(dirname "$0")
 REPO_PATH=$EXEC_PATH
 #Example: "codegen/oracle/grrppr04/grrppr04_ord_admin_import_request_detail_routing.py"
 SHELL_PARAMS=$1
