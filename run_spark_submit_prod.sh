@@ -106,6 +106,7 @@ set_static_env_vars()
     export YARN_CONF_DIR=/etc/hadoop/conf.cloudera.yarn
     export SPARK_HOME=/opt/cloudera/parcels/CDH-6.3.3-1.cdh6.3.3.p0.1796617/lib/spark
     export PYSPARK_ARCHIVES_PATH=local:/opt/cloudera/parcels/CDH-6.3.3-1.cdh6.3.3.p0.1796617/lib/spark/python/lib/py4j-0.10.7-src.zip,local:/opt/cloudera/parcels/CDH-6.3.3-1.cdh6.3.3.p0.1796617/lib/spark/python/lib/pyspark.zip
+    export ARROW_PRE_0_15_IPC_FORMAT=1
     # export PATH=/home/rundeckadmin/repository/$1/$2/TEMPORARY/bin:$PATH
 }
 
