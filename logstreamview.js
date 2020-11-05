@@ -1,6 +1,6 @@
 #!/usr/local/bin/node
-var stdin = process.openStdin();
-var data = "";
+
+
 var c = {
   Reset: "\x1b[0m",
   Bright: "\x1b[1m",
@@ -36,7 +36,7 @@ var c = {
 };
 var created1 = 0;
 
-/***
+/**
  * 
  */
 String.prototype.toHHMMSS = function () {
@@ -55,33 +55,59 @@ String.prototype.toHHMMSS = function () {
   return hours + 'h ' + minutes + 'm ' + seconds + 's';
 }
 
-/***
+/**
  * 
+ * @param {*} l 
  */
-function process_line(chunk) {
-  data += chunk;
-  chunk.toString('utf8').split("\n").map(l => {
-    try {
-      ob = JSON.parse(l);
-      var cc = parseFloat(ob.created) - parseFloat(created1);
-      created1 = ob.created
-      var sep = c.BgBlack + c.FgWhite + "\n--- " + c[ob.levelname] + " " + ob.levelname + " " + c.BgBlack +
-        c.FgWhite + " -------- " + (cc > 3 ? (cc > 60 ? c.BgRed+c.FgBlack : c.FgRed) : c.FgGreen) +
-        cc.toString().toHHMMSS() + c.BgBlack + c.FgWhite +
-        " -------------------------------------------------------------------------------------------------------"
-      console.log(sep.substring(0, 160));
-      var metd = c.FgYellow +
-        "Time: " + c.FgCyan + ob.asctime + c.FgYellow +
-        " - Script: " + c.FgCyan + ob.filename + c.FgYellow +
-        " - Function: " + c.FgCyan + ob.funcName + "() " + c.FgYellow +
-        " - Line#: " + c.FgCyan + ob.lineno + c.FgYellow +
-        "\n"
-      console.log(metd);
-      console.log(
-        c.FgWhite + ob.message //.substring(0, 100)
-      );
-    } catch (eee) { }
-  })
+function parse_line(l) {
+
+  // escaping for windows
+  l = l.replace(/\\/g,'\\\\');
+
+  try {
+    ob = JSON.parse(l);
+    var cc = parseFloat(ob.created) - parseFloat(created1);
+    created1 = ob.created
+    var sep = c.BgBlack + c.FgWhite + "\n--- " + c[ob.levelname] + " " + ob.levelname + " " + c.BgBlack +
+      c.FgWhite + " -------- " + (cc > 3 ? (cc > 60 ? c.BgRed + c.FgBlack : c.FgRed) : c.FgGreen) +
+      cc.toString().toHHMMSS() + c.BgBlack + c.FgWhite +
+      " -------------------------------------------------------------------------------------------------------"
+    console.log(sep.substring(0, 160));
+    var metd = c.FgYellow +
+      "Time: " + c.FgCyan + ob.asctime + c.FgYellow +
+      " - Script: " + c.FgCyan + ob.filename + c.FgYellow +
+      " - Function: " + c.FgCyan + ob.funcName + "() " + c.FgYellow +
+      " - Line#: " + c.FgCyan + ob.lineno + c.FgYellow +
+      "\n"
+    console.log(metd);
+    console.log(
+      c.FgWhite + ob.message //.substring(0, 100)
+    );
+  } catch (eee) {
+    console.log(eee);
+  }
 }
 
-stdin.on('data', process_line);
+/* ---------------------------- Streaming --------------------------------- */
+
+var encoding = 'utf-8';
+function processData() {
+  data.split(/\r\n|\n/).map(l => parse_line(l));;
+}
+if (process.stdin.isTTY) {
+  data = new Buffer(process.argv[2] || '', encoding);
+  processData();
+} else {
+  data = '';
+  process.stdin.setEncoding(encoding);
+  process.stdin.on('readable', function () {
+    var chunk;
+    while (chunk = process.stdin.read()) {
+      data += chunk;
+    }
+  });
+  process.stdin.on('end', function () {
+    data = data.replace(/\n$/, '');
+    processData();
+  });
+}
