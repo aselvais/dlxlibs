@@ -137,7 +137,7 @@ run_spark_submit()
     _log "Running spark-submit ..."
     set_static_env_vars
     export KEY="HmNbOyaNOHJM61bIWhnml-6EGkCqse-9UT0iCSdjD7U="
-    export PYSPARK_PYTHON=${PROJ_NAME}_env/bin/python
+    #export PYSPARK_PYTHON=${PROJ_NAME}_env/bin/python
     export PYTHON_PATH=${PROJ_NAME}_env
 
     cd $REPO_PATH;
