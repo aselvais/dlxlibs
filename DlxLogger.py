@@ -23,8 +23,8 @@ import re
 sys.path.append("/home/rundeckadmin/projects/dlxlibs")
 
 from logging.handlers import TimedRotatingFileHandler
-from dlxlibs.DlxLoggingFormatter import DlxLoggingFormatter
-from dlxlibs.DlxConfigParser import DlxConfigParser
+from DlxLoggingFormatter import DlxLoggingFormatter
+from DlxConfigParser import DlxConfigParser
 
 
 class DlxLogger:
