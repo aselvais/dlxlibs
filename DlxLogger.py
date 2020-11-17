@@ -13,12 +13,14 @@ import socket
 import json
 import re
 
-try:
-    # @todo : Find another cleaner way to make this generic
-    sys.path.append("/home/cdsw/")
-    sys.path.append("/home/cdsw/code/libs/")
-except:
-    pass
+#try:
+#    # @todo : Find another cleaner way to make this generic
+#    sys.path.append("/home/cdsw/")
+#    sys.path.append("/home/cdsw/code/libs/")
+#except:
+#    pass
+
+sys.path.append("/home/rundeckadmin/projects/dlxlibs")
 
 from logging.handlers import TimedRotatingFileHandler
 from dlxlibs.DlxLoggingFormatter import DlxLoggingFormatter
