@@ -69,7 +69,7 @@ if [ "$#" -ne 3 ]; then
 
     Usage:
         $0 [shell_params] [python_script] [python_params]
-    
+
     Example:
         $0 \"\" codegen/oracle/grrppr04/grrppr04_ord_admin_import_request_detail_routing.py \"\"
         $0 eyJwYXRoIjoiL3NvbWUvcGF0aC9oZXJlIiwiZmlsZV9sZWZ0IjoibGVmdC50eHQiLCJmaWxlX3JpZ2h0IjoicmlnaHQudHh0In0= utils/jsontohive.py \"\"
@@ -107,6 +107,7 @@ set_static_env_vars()
     export SPARK_HOME=/opt/cloudera/parcels/CDH-6.3.3-1.cdh6.3.3.p0.1796617/lib/spark
     export PYSPARK_ARCHIVES_PATH=local:/opt/cloudera/parcels/CDH-6.3.3-1.cdh6.3.3.p0.1796617/lib/spark/python/lib/py4j-0.10.7-src.zip,local:/opt/cloudera/parcels/CDH-6.3.3-1.cdh6.3.3.p0.1796617/lib/spark/python/lib/pyspark.zip
     export ARROW_PRE_0_15_IPC_FORMAT=1
+    export PYSPARK_PYTHON=./${PROJ_NAME}_env/temporary/bin/python
     # export PATH=/home/rundeckadmin/repository/$1/$2/TEMPORARY/bin:$PATH
 }
 
@@ -136,7 +137,7 @@ run_spark_submit()
     _log "Running spark-submit ..."
     set_static_env_vars
     export KEY="HmNbOyaNOHJM61bIWhnml-6EGkCqse-9UT0iCSdjD7U="
-    export PYSPARK_PYTHON=${PROJ_NAME}_env/bin/python
+    #export PYSPARK_PYTHON=${PROJ_NAME}_env/bin/python
     export PYTHON_PATH=${PROJ_NAME}_env
 
     cd $REPO_PATH;
@@ -161,7 +162,7 @@ run_spark_submit()
                 --properties-file $SPARK_DEFAULTS \
                 --py-files $REPO_PATH/temporary.zip \
                 $EXEC_PATH/$SCRIPT_PATH $PYTHON_PARAMS;
-    echo $?             
+    echo $?            
 }
 
 
@@ -182,7 +183,7 @@ git submodule update --remote
 
 if [ $CHANGED -eq 1 ]; then
     _log "There was a change, we need to re-build the project." "WARNING"
-    if [ "$MD5_OLD" == "$MD5_NEW" ]; then 
+    if [ "$MD5_OLD" == "$MD5_NEW" ]; then
         _log "ZIP file did not change... we won't rebuild the env"
     else
         _log "The ZIP has changed... rebuilding the env." "WARNING"
@@ -195,3 +196,4 @@ if [ $CHANGED -eq 0 ]; then
     _log "No change... We can just run the job."
     run_spark_submit
 fi
+
