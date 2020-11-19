@@ -69,7 +69,7 @@ if [ "$#" -ne 3 ]; then
 
     Usage:
         $0 [shell_params] [python_script] [python_params]
-    
+
     Example:
         $0 \"\" codegen/oracle/grrppr04/grrppr04_ord_admin_import_request_detail_routing.py \"\"
         $0 eyJwYXRoIjoiL3NvbWUvcGF0aC9oZXJlIiwiZmlsZV9sZWZ0IjoibGVmdC50eHQiLCJmaWxlX3JpZ2h0IjoicmlnaHQudHh0In0= utils/jsontohive.py \"\"
@@ -162,8 +162,7 @@ run_spark_submit()
                 --properties-file $SPARK_DEFAULTS \
                 --py-files $REPO_PATH/temporary.zip \
                 $EXEC_PATH/$SCRIPT_PATH $PYTHON_PARAMS;
-                
-    echo $?             
+    echo $?            
 }
 
 
@@ -184,7 +183,7 @@ git submodule update --remote
 
 if [ $CHANGED -eq 1 ]; then
     _log "There was a change, we need to re-build the project." "WARNING"
-    if [ "$MD5_OLD" == "$MD5_NEW" ]; then 
+    if [ "$MD5_OLD" == "$MD5_NEW" ]; then
         _log "ZIP file did not change... we won't rebuild the env"
     else
         _log "The ZIP has changed... rebuilding the env." "WARNING"
@@ -197,3 +196,4 @@ if [ $CHANGED -eq 0 ]; then
     _log "No change... We can just run the job."
     run_spark_submit
 fi
+
