@@ -162,6 +162,8 @@ run_spark_submit()
                 --properties-file $SPARK_DEFAULTS \
                 --py-files $REPO_PATH/temporary.zip \
                 $EXEC_PATH/$SCRIPT_PATH $PYTHON_PARAMS;
+                
+   echo $?             
 }
 
 
