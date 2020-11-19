@@ -163,7 +163,7 @@ run_spark_submit()
                 --py-files $REPO_PATH/temporary.zip \
                 $EXEC_PATH/$SCRIPT_PATH $PYTHON_PARAMS;
                 
-   echo $?             
+    echo $?             
 }
 
 
