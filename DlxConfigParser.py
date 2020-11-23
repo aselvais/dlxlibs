@@ -8,19 +8,14 @@ The configuration file name has to be in the root directory of the project and n
  - dlxconfig-{end}.json
 where {env} is the environment name (dev | stage | prod)
 """
-import os
-import sys
-
-try:
-    if os.environ["USER"] == 'rundeckadmin':
-        os.environ["PYTHONPATH"] = "/usr/lib/python3.6/site-packages"
-        sys.path.append("/usr/lib/python3.6/site-packages")
-        sys.path.append("/usr/local/lib/python3.6/site-packages")
-except:
-    pass
-
+import os, sys, json
 from pathlib import Path
-import json
+try:
+    _rootpath = os.path.dirname(os.path.abspath(__file__)) + '/..'
+except:
+    _rootpath = os.getcwd()
+sys.path.append(_rootpath)
+
 
 
 class DlxConfigParser:

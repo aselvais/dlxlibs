@@ -5,26 +5,16 @@ This class is 100% compatible with the default Python logging class
 and make it easy to setup handlers for console, file and kafka.
 The Kafka handler should be used in production only if possible.
 """
-import logging
-import sys
-import os
-import getpass
-import socket
-import json
-import re
-
-#try:
-#    # @todo : Find another cleaner way to make this generic
-#    sys.path.append("/home/cdsw/")
-#    sys.path.append("/home/cdsw/code/libs/")
-#except:
-#    pass
-
-sys.path.append("/home/rundeckadmin/projects/dlxlibs")
+import logging, sys, os, getpass, socket, json, re
+try:
+    _rootpath = os.path.dirname(os.path.abspath(__file__)) + '/..'
+except:
+    _rootpath = os.getcwd()
+sys.path.append(_rootpath)
 
 from logging.handlers import TimedRotatingFileHandler
-from DlxLoggingFormatter import DlxLoggingFormatter
-from DlxConfigParser import DlxConfigParser
+from dlxlibs.DlxLoggingFormatter import DlxLoggingFormatter
+from dlxlibs.DlxConfigParser import DlxConfigParser
 
 
 class DlxLogger:

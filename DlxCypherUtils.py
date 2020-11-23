@@ -15,9 +15,13 @@ Example encrypting a string:
 
     {0} e MyPassword
 """
-import os
+import os, sys
 from cryptography.fernet import Fernet
-import sys
+try:
+    _rootpath = os.path.dirname(os.path.abspath(__file__)) + '/..'
+except:
+    _rootpath = os.getcwd()
+sys.path.append(_rootpath)
 
 cipher_suite = ""
 

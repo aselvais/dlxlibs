@@ -3,7 +3,12 @@
 Abstraction layer to use HDFS on the EDP. 
 """
 from datetime import datetime
-import re
+import re, os, sys
+try:
+    _rootpath = os.path.dirname(os.path.abspath(__file__)) + '/..'
+except:
+    _rootpath = os.getcwd()
+sys.path.append(_rootpath)
 from dlxlibs.DlxLogger import DlxLogger
 from dlxlibs.DlxBash import DlxBash
 

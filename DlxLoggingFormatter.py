@@ -5,8 +5,7 @@ for cleaning up the data going through the message and args
 parameters
 """
 from logging import Formatter
-import json
-import re
+import json, re
 
 class DlxLoggingFormatter(Formatter):
     """

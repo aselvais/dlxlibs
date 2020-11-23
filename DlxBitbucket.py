@@ -2,9 +2,15 @@
 \defgroup Version control
 Abstraction layer to access Bitbucket from Python. 
 """
+import os, sys, git
+try:
+    _rootpath = os.path.dirname(os.path.abspath(__file__)) + '/..'
+except:
+    _rootpath = os.getcwd()
+sys.path.append(_rootpath)
+
 from dlxlibs.DlxLogger import DlxLogger
 from dlxlibs.DlxBash import DlxBash
-import git
 
 
 _logger = DlxLogger().get_logger()

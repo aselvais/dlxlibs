@@ -2,7 +2,13 @@
 \defgroup Logging
 Extends the StreamHandler pushing data to Kafka
 """
+import os, sys
 from logging import StreamHandler
+try:
+    _rootpath = os.path.dirname(os.path.abspath(__file__)) + '/..'
+except:
+    _rootpath = os.getcwd()
+sys.path.append(_rootpath)
 from dlxlibs.DlxKafkaBroker import DlxKafkaBroker
 
 class DlxKafkaLoggingHandler(StreamHandler):
