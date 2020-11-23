@@ -117,13 +117,17 @@ class DlxLogger:
         self._log_format = format
         self._log_ext = log_ext
         self._handlers = handlers
-        self._full_log_file_name = os.path.dirname(os.path.realpath(
-            __file__)) + self._log_dir + self._app_name + '.' + self._log_ext
-        self._formatter = self._get_format()
+
         try:
-            self._username = getpass.getuser()
+            self._username = os.getlogin()
         except:
-            self._username = ''
+            try:
+                self._username = getpass.getuser()
+            except:
+                self._username = ''
+        
+        self._full_log_file_name = os.path.dirname(os.path.realpath(__file__)) + self._log_dir + self._username + '-' + self._app_name + '.' + self._log_ext
+        self._formatter = self._get_format()
         try:
             self._homedir = os.environ['HOME']
         except:
