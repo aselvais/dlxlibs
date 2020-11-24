@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-import math, json, sys
+import math, json, sys, re
 
 c = {
   "Reset": "\x1b[0m",
@@ -35,7 +35,7 @@ c = {
   "BgWhite": "\x1b[47m"
 }
 created1 = 0
-
+obrelativeCreated = 0
 
 def console_log(v):
     """[summary]
@@ -62,12 +62,22 @@ def toHHMMSS(v):
     minutes = math.floor((sec_num - (hours * 3600)) / 60)
     seconds = sec_num - (hours * 3600) - (minutes * 60)
     if hours < 10:
-        hours = "0" + hours
+        hours = f"0{hours}"
     if minutes < 10:
         minutes = f"0{minutes}"
     if seconds < 10:
         seconds = f"0{seconds}"
     return f"{hours} h {minutes} m {seconds} s"
+
+
+def get_color_from_nbr(cc, red_nbr = 60, orng_nbr = 3 ):
+    if cc >= red_nbr:
+        ddd = c["BgRed"] + c["FgBlack"]
+    elif cc >= orng_nbr:
+        ddd = c["FgRed"] + c["FgBlack"]
+    else:
+        ddd = c["FgGreen"] + c["BgBlack"]
+    return ddd
 
 
 def parse_line(l):
@@ -76,25 +86,26 @@ def parse_line(l):
     Args:
         l ([type]): [description]
     """
-    global created1, c
+    global created1, c, obrelativeCreated
     # escaping for windows
     # l = l.replace(/\\/g,'\\\\');
     try:
         ob = json.loads(l);
         cc = float(ob["created"]) - float(created1)
         created1 = ob["created"]
-        if cc > 60:
-            ddd = c["BgRed"] + c["FgBlack"]
-        elif cc > 3:
-            ddd = c["FgRed"] + c["FgBlack"]
-        else:
-            ddd = c["FgGreen"] + c["BgBlack"]
         
+        ooo = int(ob['relativeCreated']) - int(obrelativeCreated)
+        mselapsed = get_color_from_nbr(ooo, 30 * 60,  15 * 60) + toHHMMSS(ooo) + c["BgBlack"] + c["FgWhite"]
+        obrelativeCreated = ob['relativeCreated']
+
+        ddd = get_color_from_nbr(cc, 60, 3 )
         ccdd = toHHMMSS(cc)
-        sep = f'''{c["BgBlack"]}{c["FgWhite"]} --- {c[ob["levelname"]]} {ob["levelname"]} {c["BgBlack"]}{c["FgWhite"]} -------- {ddd}{ccdd}{c["BgBlack"]}{c["FgWhite"]} -------------------------------------------------------------------------------------------------------'''
+
+        sep = f'''{c["BgBlack"]}{c["FgWhite"]}--- {c[ob["levelname"]]} {ob["levelname"]} {c["BgBlack"]}{c["FgWhite"]} -------- {ddd}{ccdd}{c["BgBlack"]}{c["FgWhite"]} --- {mselapsed} --------------------------------------------------------------------------------------------------'''
         str01 = sep[0:160]
         str02 = f'''{c["FgYellow"]}Time: {c["FgCyan"]}{ob["asctime"]}{c["FgYellow"]} - Script: {c["FgCyan"]}{ob["filename"]}{c["FgYellow"]} - Function: {c["FgCyan"]}{ob["funcName"]}() {c["FgYellow"]} - Line#: {c["FgCyan"]}{ob["lineno"]}{c["FgYellow"]}'''
-        str03 = f'''{c["FgWhite"]}{ob["message"]}'''
+        msg = ob["message"].replace('\\\\\\','')
+        str03 = f'''{c["FgWhite"]}{msg}'''
         return f'''{str01}\n{str02}\n\n{str03}\n\n'''
     except Exception as e:
         return e
