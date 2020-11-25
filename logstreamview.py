@@ -1,5 +1,15 @@
 #!/usr/bin/python3
-import math, json, sys, re
+"""
+Script for using with tail -f displaying the log file (produced by dlxlogger)
+in a user friendly way.
+"""
+import math, sys, os, json
+try:
+    _rootpath = os.path.dirname(os.path.abspath(__file__)) + '/..'
+except:
+    _rootpath = os.getcwd()
+sys.path.append(_rootpath)
+from dlxlibs.models.LogEntry import LogEntry
 
 c = {
   "Reset": "\x1b[0m",
@@ -71,6 +81,16 @@ def toHHMMSS(v):
 
 
 def get_color_from_nbr(cc, red_nbr = 60, orng_nbr = 3 ):
+    """[summary]
+
+    Args:
+        cc ([type]): [description]
+        red_nbr (int, optional): [description]. Defaults to 60.
+        orng_nbr (int, optional): [description]. Defaults to 3.
+
+    Returns:
+        [type]: [description]
+    """
     if cc >= red_nbr:
         ddd = c["BgRed"] + c["FgBlack"]
     elif cc >= orng_nbr:
@@ -90,7 +110,7 @@ def parse_line(l):
     # escaping for windows
     # l = l.replace(/\\/g,'\\\\');
     try:
-        ob = json.loads(l);
+        ob = LogEntry(json.loads(l))
         cc = float(ob["created"]) - float(created1)
         created1 = ob["created"]
         
@@ -113,5 +133,10 @@ def parse_line(l):
 
 
 if __name__ == '__main__':
-    for line in sys.stdin:
-        print(parse_line(line))
+    _debug = False
+    if _debug is True:
+        _l = '{"source_system_name": "logs", "schema_name": "logs", "table_name": "logs", "env": "dev", "asctime": "2020-11-23 22:05:20,860", "levelname": "DEBUG", "levelno": "10", "message": "end main_launcher", "module": "DlxImportsTemplate", "filename": "DlxImportsTemplate.py", "homedir": "", "pathname": "/home/cdsw/datasnapshot-codegen/mssql/safeguardcorp/../../../libs/DlxImportsTemplate.py", "created": "1606169120.860502", "msecs": "860", "relativeCreated": "308079", "name": "dlxlibs.DlxLogger", "username": "cdsw", "hostname": "", "funcName": "main_launcher", "lineno": "711", "process": "3799", "processName": "MainProcess", "thread": "139701601322752", "threadName": "MainThread", "args": "()", "exc_info": "None", "exc_text": "None", "stack_info": "None"}'
+        print(parse_line(_l))
+    else:
+        for line in sys.stdin:
+            print(parse_line(line))
