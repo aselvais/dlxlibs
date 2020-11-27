@@ -128,6 +128,7 @@ def parse_line(l):
         str03 = f'''{c["FgWhite"]}{msg}'''
         return f'''{str01}\n{str02}\n\n{str03}\n\n'''
     except Exception as e:
+        print(e)
         return e
 
 

@@ -1,6 +1,5 @@
-from typing import Dict
 from typing_extensions import TypedDict
-import json
+import re
 
 class LogEntry(TypedDict):
 
@@ -32,9 +31,4 @@ class LogEntry(TypedDict):
     exc_info: str           # None
     exc_text: str           # None
     stack_info: str         # None
-
-
-    def __init__(self, l: TypedDict) -> None:
-        for i in l:
-            self[i] = l[i]
 
