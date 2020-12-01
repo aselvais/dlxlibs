@@ -2,7 +2,19 @@
 Generic class for persisting data in JSON format in the file system.
 You can use that to "cache" data in files (write and read/retreive).
 """
+import decimal
 import json
+from dlxlibs.DlxLogger import DlxLogger
+
+logger = DlxLogger().get_logger()
+
+
+class DecimalEncoder(json.JSONEncoder):
+        
+    def default(self, o):
+        if isinstance(o, decimal.Decimal):
+            return float(o)
+        return super(DecimalEncoder, self).default(o)
 
 
 class DlxPersist():
@@ -30,9 +42,14 @@ class DlxPersist():
             path (str): Full path of the file where we want to write the JSON data. Defaults to "".
             content (Any, optional): Data we want to persist; if empty string we use self._data. Defaults to "".
         """
+        logger.debug(f"DlxPersist.write({path})")
         if content == "":
             content = self._data
-        json.dump(obj=content, fp=open(path,"w"), indent="\t")
+        try:
+            json.dump(obj=content, fp=open(path,"w"), indent="\t", ensure_ascii=True, cls=DecimalEncoder)
+        except Exception as e:
+            logger.error(f"DlxPersist.write({path}, {content})")
+            logger.error(e)
 
 
     def read(self, path: str = ""):
@@ -45,9 +62,11 @@ class DlxPersist():
         Returns:
             Any: None if error; or the Python list/dict/string from the JSON file
         """
+        logger.debug(f"DlxPersist.read({path})")
         try:
             self._data = json.load(open(path,"r"))
             return self._data
-        except:
+        except Exception as e:
+            logger.error(f"DlxPersist.read({path})")
+            logger.error(e)
             return None
-            

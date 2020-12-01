@@ -124,7 +124,7 @@ def parse_line(l):
         sep = f'''{c["BgBlack"]}{c["FgWhite"]}--- {c[ob["levelname"]]} {ob["levelname"]} {c["BgBlack"]}{c["FgWhite"]} -------- {ddd}{ccdd}{c["BgBlack"]}{c["FgWhite"]} --- {mselapsed} --------------------------------------------------------------------------------------------------'''
         str01 = sep[0:160]
         str02 = f'''{c["FgYellow"]}Time: {c["FgCyan"]}{ob["asctime"]}{c["FgYellow"]} - Script: {c["FgCyan"]}{ob["filename"]}{c["FgYellow"]} - Function: {c["FgCyan"]}{ob["funcName"]}() {c["FgYellow"]} - Line#: {c["FgCyan"]}{ob["lineno"]}{c["FgYellow"]}'''
-        msg = ob["message"].replace('\\\\\\','')
+        msg = ob["message"].replace('\\\\\\','').replace('\\\\','\\').replace('\\n','\n') 
         str03 = f'''{c["FgWhite"]}{msg}'''
         return f'''{str01}\n{str02}\n\n{str03}\n\n'''
     except Exception as e:
