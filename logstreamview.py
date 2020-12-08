@@ -68,9 +68,9 @@ def toHHMMSS(v):
     sec_num = v
     if sec_num < 60:
         return f"{v} sec."
-    hours = math.floor(sec_num / 3600)
-    minutes = math.floor((sec_num - (hours * 3600)) / 60)
-    seconds = sec_num - (hours * 3600) - (minutes * 60)
+    hours = math.floor(sec_num / (60*60))
+    minutes = math.floor((sec_num - (hours * (60*60))) / 60)
+    seconds = sec_num - (hours * (60*60)) - (minutes * 60)
     if hours < 10:
         hours = f"0{hours}"
     if minutes < 10:
@@ -94,11 +94,10 @@ def get_color_from_nbr(cc, red_nbr = 60, orng_nbr = 3 ):
     if cc >= red_nbr:
         ddd = c["BgRed"] + c["FgBlack"]
     elif cc >= orng_nbr:
-        ddd = c["FgRed"] + c["FgBlack"]
+        ddd = c["FgRed"] + c["BgBlack"]
     else:
         ddd = c["FgGreen"] + c["BgBlack"]
     return ddd
-
 
 def parse_line(l):
     """[summary]
@@ -123,7 +122,8 @@ def parse_line(l):
 
         sep = f'''{c["BgBlack"]}{c["FgWhite"]}--- {c[ob["levelname"]]} {ob["levelname"]} {c["BgBlack"]}{c["FgWhite"]} -------- {ddd}{ccdd}{c["BgBlack"]}{c["FgWhite"]} --- {mselapsed} --------------------------------------------------------------------------------------------------'''
         str01 = sep[0:160]
-        str02 = f'''{c["FgYellow"]}Time: {c["FgCyan"]}{ob["asctime"]}{c["FgYellow"]} - Script: {c["FgCyan"]}{ob["filename"]}{c["FgYellow"]} - Function: {c["FgCyan"]}{ob["funcName"]}() {c["FgYellow"]} - Line#: {c["FgCyan"]}{ob["lineno"]}{c["FgYellow"]}'''
+        str02 = f'''{c["FgYellow"]}Script: {c["FgCyan"]}{ob["filename"]}{c["FgYellow"]} - Function: {c["FgCyan"]}{ob["funcName"]}() {c["FgYellow"]} - Line#: {c["FgCyan"]}{ob["lineno"]}{c["FgYellow"]}
+{c["FgYellow"]}Time: {c["FgCyan"]}{ob["asctime"]}{c["FgYellow"]} - Process#: {c["FgCyan"]}{ob["process"]}{c["FgYellow"]} - Thread#: {c["FgCyan"]}{ob["thread"]}{c["FgYellow"]}'''
         msg = ob["message"].replace('\\\\\\','').replace('\\\\','\\').replace('\\n','\n') 
         str03 = f'''{c["FgWhite"]}{msg}'''
         return f'''{str01}\n{str02}\n\n{str03}\n\n'''
