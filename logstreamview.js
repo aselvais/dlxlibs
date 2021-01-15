@@ -1,6 +1,10 @@
 #!/usr/local/bin/node
 
 
+// some comment
+
+
+
 var c = {
   Reset: "\x1b[0m",
   Bright: "\x1b[1m",
