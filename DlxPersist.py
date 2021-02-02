@@ -2,8 +2,7 @@
 Generic class for persisting data in JSON format in the file system.
 You can use that to "cache" data in files (write and read/retreive).
 """
-import decimal
-import json
+import decimal, json, re
 from dlxlibs.DlxLogger import DlxLogger
 
 logger = DlxLogger().get_logger()
@@ -14,6 +13,10 @@ class DecimalEncoder(json.JSONEncoder):
     def default(self, o):
         if isinstance(o, decimal.Decimal):
             return float(o)
+        try:
+            return o.toString()
+        except:
+            pass            
         return super(DecimalEncoder, self).default(o)
 
 
