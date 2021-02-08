@@ -2,7 +2,7 @@
 Generic class for persisting data in JSON format in the file system.
 You can use that to "cache" data in files (write and read/retreive).
 """
-import decimal, json, re
+import decimal, json, os, time
 from dlxlibs.DlxLogger import DlxLogger
 from hashlib import md5
 
@@ -26,9 +26,12 @@ class DlxPersist():
 
     """The data foming from another Python module/class we need to persist"""
     _data = None
+    _data_old = None
     _json_data_str = None
     _json_data_md5 = None
+    _json_data_md5_old = None
     _versioning = False
+    _has_changed = False
 
 
     def __init__(self, _data = "", versioning = False):
@@ -52,8 +55,14 @@ class DlxPersist():
         self._data = _data
         self._data_to_json()
         if self._versioning is True:
-            self._json_data_md5 = md5(self._json_data_str.encode()).hexdigest()
-    
+            self._compute_md5_hash()
+
+
+    def _compute_md5_hash(self):
+        """[summary]
+        """
+        self._json_data_md5 = md5(self._json_data_str.encode()).hexdigest()
+
 
     def _data_to_json(self):
         """[summary]
@@ -74,13 +83,28 @@ class DlxPersist():
             content (Any, optional): Data we want to persist; if empty string we use self._data. Defaults to "".
         """
         logger.debug(f"DlxPersist.write({path})")
+        
+        if self._versioning is True:
+            try:
+                f = open(f"{path}.md5", "r")
+                self._json_data_md5_old = f.read()
+            except:
+                pass
+            if self._json_data_md5_old != self._json_data_md5:
+                ts = time.time()
+                # read old data
+                self._data_old = json.load(open(path, "r"))
+                # move old files around
+                os.rename(path, f"{path}.{ts}")
+                self._has_changed = True
+
         if content != "":
             self.set_data(content)
         try:
-            # json.dump(obj=content, fp=open(path,"w"), indent="\t", ensure_ascii=True, cls=DecimalEncoder)
             f = open(path, "w")
             f.write(self._json_data_str)
             f.close()
+
             if self._versioning is True:
                 f = open(f"{path}.md5", "w")
                 f.write(self._json_data_md5)
