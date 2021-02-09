@@ -133,3 +133,31 @@ class DlxPersist():
             logger.error(f"DlxPersist.read({path})")
             logger.error(e)
             return None
+    
+
+    def get_compared_data_version(self):
+        new = self._data['columns_0']
+        old = self._data_old['columns_0']
+        r = {}
+
+        for i in old:
+            kk = f'{i[0]}|{i[1]}|{i[2]}'
+            try: r[kk]
+            except: r[kk] = {}
+            r[kk]['old'] = i
+            r[kk]['different'] = True
+
+        for i in new:
+            kk = f'{i[0]}|{i[1]}|{i[2]}'
+            try: r[kk]
+            except: r[kk] = {}
+            r[kk]['new'] = i
+            r[kk]['different'] = True
+            try:
+                if r[kk]['new'] == r[kk]['old']:
+                    r[kk]['different'] = False
+            except:
+                pass
+
+        return r
+
