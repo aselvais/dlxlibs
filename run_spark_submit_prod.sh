@@ -107,8 +107,16 @@ set_static_env_vars()
     export SPARK_HOME=/opt/cloudera/parcels/CDH-6.3.3-1.cdh6.3.3.p0.1796617/lib/spark
     export PYSPARK_ARCHIVES_PATH=local:/opt/cloudera/parcels/CDH-6.3.3-1.cdh6.3.3.p0.1796617/lib/spark/python/lib/py4j-0.10.7-src.zip,local:/opt/cloudera/parcels/CDH-6.3.3-1.cdh6.3.3.p0.1796617/lib/spark/python/lib/pyspark.zip
     export ARROW_PRE_0_15_IPC_FORMAT=1
-    export PYSPARK_PYTHON=./${PROJ_NAME}_env/bin/python
+    # TODO to be tested! changed fri evening Feb 12
+    export PYSPARK_PYTHON=${EXEC_PATH}/${PROJ_NAME}_env/bin/python
+    export PATH="${EXEC_PATH}/${PROJ_NAME}_env/bin:$PATH"
+    export PYTHONPATH="${EXEC_PATH}/${PROJ_NAME}_env"
+    export PYTHONHOME="${EXEC_PATH}/${PROJ_NAME}_env"
     # export PATH=/home/rundeckadmin/repository/$1/$2/TEMPORARY/bin:$PATH
+    export KEY="HmNbOyaNOHJM61bIWhnml-6EGkCqse-9UT0iCSdjD7U="
+    # export PYSPARK_PYTHON=${PROJ_NAME}_env/bin/python
+    # export PYTHON_PATH=${PROJ_NAME}_env
+    PYTHON_INTRPRT_LOCATION=`python3 -c "import sys;print(sys.executable)"`
 }
 
 #
@@ -136,10 +144,8 @@ run_spark_submit()
 {
     _log "Running spark-submit ..."
     set_static_env_vars
-    export KEY="HmNbOyaNOHJM61bIWhnml-6EGkCqse-9UT0iCSdjD7U="
-    #export PYSPARK_PYTHON=${PROJ_NAME}_env/bin/python
-    export PYTHON_PATH=${PROJ_NAME}_env
-
+    # TODO : Maybe test here if we are using the right interpreter from the venv
+    _log "Python interpreter location: ${PYTHON_INTRPRT_LOCATION}"
     cd $REPO_PATH;
     _log "Kerberos auth ...";
     kinit -kt $RUNDECK_HOME_PATH/rundeckadmin.keytab rundeckadmin@DELUXE.COM;
