@@ -110,7 +110,7 @@ set_static_env_vars()
     # TODO to be tested! changed fri evening Feb 12
     export PYSPARK_PYTHON=${EXEC_PATH}/${PROJ_NAME}_env/bin/python
     export PATH="${EXEC_PATH}/${PROJ_NAME}_env/bin:$PATH"
-    export PYTHONPATH="${EXEC_PATH}/${PROJ_NAME}_env"
+    export PYTHONPATH="${EXEC_PATH}/${PROJ_NAME}_env/lib/python3.6:${EXEC_PATH}/${PROJ_NAME}_env/lib/python3.6/lib-dynload:${EXEC_PATH}/${PROJ_NAME}_env/lib/python3.6/site-packages"
     export PYTHONHOME="${EXEC_PATH}/${PROJ_NAME}_env"
     # export PATH=/home/rundeckadmin/repository/$1/$2/TEMPORARY/bin:$PATH
     export KEY="HmNbOyaNOHJM61bIWhnml-6EGkCqse-9UT0iCSdjD7U="
