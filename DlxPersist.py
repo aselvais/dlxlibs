@@ -92,11 +92,16 @@ class DlxPersist():
                 pass
             if self._json_data_md5_old != self._json_data_md5:
                 ts = time.time()
-                # read old data
-                self._data_old = json.load(open(path, "r"))
-                # move old files around
-                os.rename(path, f"{path}.{ts}")
-                self._has_changed = True
+                try:
+                    # read old data
+                    self._data_old = json.load(open(path, "r"))
+                    # move old files around
+                    os.rename(path, f"{path}.{ts}")
+                    self._has_changed = True
+                except Exception as e:
+                    logger.error(f"DlxPersist.load({path}, {content})")
+                    logger.error(e)
+
 
         if content != "":
             self.set_data(content)
