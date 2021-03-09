@@ -31,7 +31,6 @@ class DlxKafkaBroker(object):
         """
         self.json = json
         prms = {
-                #'value_serializer': (lambda v: json.dumps(v).encode('utf-8')),
                 'bootstrap_servers': bootstrap_servers,
                 'api_version': None,
                 'security_protocol': 'SASL_SSL',
@@ -47,13 +46,10 @@ class DlxKafkaBroker(object):
                 'receive_buffer_bytes': 1024*10,
                 'send_buffer_bytes': 1024*10
         }
-        if not json:
+        try:
             self.producer = KafkaProducer(**prms)
-        else:
-            try:
-                self.producer = KafkaProducer(**prms)
-            except:
-                print('Can not connect to Kafka')
+        except Exception as e:
+            print('Can not connect to Kafka')
 
 
     def send(self, data, topic):
@@ -68,4 +64,8 @@ class DlxKafkaBroker(object):
             result = self.producer.send(topic, key=b'log', value=data)
         else:
             result = self.producer.send(topic, data.encode())
+        try:
+            self.producer.flush()
+        except:
+            pass
 

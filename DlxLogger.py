@@ -264,7 +264,7 @@ class DlxLogger:
         elif loggername == "":
             loggername = __name__
         
-        logger = logging.getLogger()
+        logger = logging.getLogger(loggername)
         logger.setLevel(logging.DEBUG)
         chs = logging.StreamHandler()
         logger.addHandler(chs)
