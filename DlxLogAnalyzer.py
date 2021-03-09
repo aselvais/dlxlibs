@@ -47,7 +47,7 @@ class DlxLogAnalyzer:
         frames = []
         for thefile in files:
             fullpath=os.path.dirname(__file__) + '/../' + dirr + thefile
-            print(fullpath)
+            #print(fullpath)
             frames.append(pd.read_json(fullpath, lines=True))
         return pd.concat(frames)
 

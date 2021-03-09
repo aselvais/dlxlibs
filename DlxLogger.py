@@ -242,23 +242,29 @@ class DlxLogger:
             [type]: [description]
         """
         try:
+            from dlxlibs.DlxKafkaLoggingHandler import DlxKafkaLoggingHandler
             bootstrap_servers = "ala09035.edp-prod.deluxe.com:9093,ala09036.edp-prod.deluxe.com:9093,ala09037.edp-prod.deluxe.com:9093"
-            _dlxKafkaLoggingHandler = DlxKafkaLoggingHandler(
-                bootstrap_servers, 'log-loggers')
+            _dlxKafkaLoggingHandler = DlxKafkaLoggingHandler(bootstrap_servers, 'log-loggers')
             _dlxKafkaLoggingHandler.setFormatter(self._formatter)
             return _dlxKafkaLoggingHandler
-        except:
+        except Exception as ee:
+            # print(ee)
             raise Exception('Kafka handler init failed')
             return None
 
-    def get_logger(self):
+    def get_logger(self, loggername=""):
         """
         Returns the logger all configured ready to use
 
         Returns:
             [type]: [description]
         """
-        logger = logging.getLogger(__name__)
+        if loggername == "" and self._app_name != "default":
+            loggername = self._app_name
+        elif loggername == "":
+            loggername = __name__
+        
+        logger = logging.getLogger()
         logger.setLevel(logging.DEBUG)
         chs = logging.StreamHandler()
         logger.addHandler(chs)
@@ -274,7 +280,6 @@ class DlxLogger:
                 logger.addHandler(fh)
 
         if re.search('k', self._handlers):
-            from dlxlibs.DlxKafkaLoggingHandler import DlxKafkaLoggingHandler
             kh = self._get_kafka_handler()
             if kh is not None:
                 logger.addHandler(kh)
