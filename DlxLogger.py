@@ -207,7 +207,7 @@ class DlxLogger:
             console_handler.setFormatter(self._formatter)
             return console_handler
         except:
-            raise Exception('Console handler init failed')
+            print('Console handler init failed')
             return None
 
     def _get_file_handler(self):
@@ -227,7 +227,7 @@ class DlxLogger:
             file_handler.setFormatter(self._formatter)
             return file_handler
         except:
-            raise Exception(
+            print(
                 'File handler init failed. Check that the "logs" directory exists in the root of your project.')
             return None
 
@@ -249,7 +249,7 @@ class DlxLogger:
             return _dlxKafkaLoggingHandler
         except Exception as ee:
             # print(ee)
-            raise Exception('Kafka handler init failed')
+            print('Kafka handler init failed')
             return None
 
     def get_logger(self, loggername=""):
