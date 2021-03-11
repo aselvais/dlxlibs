@@ -49,7 +49,8 @@ class DlxKafkaBroker(object):
         try:
             self.producer = KafkaProducer(**prms)
         except Exception as e:
-            print('Can not connect to Kafka')
+            print(e)
+            print('ERROR: Can not connect to Kafka!!!')
 
 
     def send(self, data, topic):
@@ -60,10 +61,14 @@ class DlxKafkaBroker(object):
             data ([type]): Data to send as a kafka message
             topic ([type]): Topic to write to
         """
-        if self.json:
-            result = self.producer.send(topic, key=b'log', value=data)
-        else:
-            result = self.producer.send(topic, data.encode())
+        try:
+            if self.json:
+                result = self.producer.send(topic, key=b'log', value=data)
+            else:
+                result = self.producer.send(topic, data.encode())
+        except:
+            print('ERROR with the kafka producer')
+            pass
         try:
             self.producer.flush()
         except:
