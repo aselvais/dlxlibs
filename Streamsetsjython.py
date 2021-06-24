@@ -1,3 +1,8 @@
+"""
+Set of classes used as Mock object for the sdc
+object when using Python (Jython) in Streamsets
+
+"""
 import json
 import logging
 from datetime import datetime
