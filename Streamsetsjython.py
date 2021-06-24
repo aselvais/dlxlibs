@@ -10,7 +10,8 @@ from datetime import datetime
 
 class Write():
     """
-
+    Mock class for writing records
+    It will display the data to the STDOUT
     """
     _type = 'OUTPUT'
 
@@ -35,7 +36,7 @@ class Write():
 
 class WriteError(Write):
     """
-
+    Error version of the write class
     Args:
         Write ([type]): [description]
     """
@@ -49,41 +50,44 @@ class WriteError(Write):
 
 class Record:
     """
+    Record class which can be processed in a loop in Records
 
-     record.value = 'Hello '                            # Change record root field value to a STRING value
-     record.value = { 'V' : 'Hello'}                    # Change record root field value to a MAP value and create an entry
-     record.value['X'] = record.value['V'] + ' World'   # Access a MAP entry
-     record.value['V'] = 5                              # Modify a MAP entry
-     record.value['A'] = [ 'Element 1', 'Element 2' ]   # Create an ARRAY entry
-     record.value['B'] = record.value['A'][0]           # Access an ARRAY entry
-     record.value['A'][0] = 100                         # Modify an existing ARRAY entry
-     record.value['null_int'] = sdc.NULL_INTEGER        # Assign a integer type to a field and value null
+    Examples:
+        
+        record.value = 'Hello '                            # Change record root field value to a STRING value
+        record.value = { 'V' : 'Hello'}                    # Change record root field value to a MAP value and create an entry
+        record.value['X'] = record.value['V'] + ' World'   # Access a MAP entry
+        record.value['V'] = 5                              # Modify a MAP entry
+        record.value['A'] = [ 'Element 1', 'Element 2' ]   # Create an ARRAY entry
+        record.value['B'] = record.value['A'][0]           # Access an ARRAY entry
+        record.value['A'][0] = 100                         # Modify an existing ARRAY entry
+        record.value['null_int'] = sdc.NULL_INTEGER        # Assign a integer type to a field and value null
 
-     # Check if the field is NULL_INTEGER(Both '==' and 'is' work). If so, assign a value 
-     if sdc.getFieldNull(record, '/null_int') == sdc.NULL_INTEGER: 
-        record.value['null_int'] = 123
+        # Check if the field is NULL_INTEGER(Both '==' and 'is' work). If so, assign a value 
+        if sdc.getFieldNull(record, '/null_int') == sdc.NULL_INTEGER: 
+            record.value['null_int'] = 123
 
-     fieldAttr = record.sdcRecord.get('/value').getAttribute('attr')  # Direct access to the underlying Data Collector Record. Use for read-only operations.
+        fieldAttr = record.sdcRecord.get('/value').getAttribute('attr')  # Direct access to the underlying Data Collector Record. Use for read-only operations.
 
-     # Create a new record with map field 
-     newRecord = sdc.createRecord(record.sourceId + ':newRecordId')
-     newRecord.value = {'field1' : 'val1', 'field2' : 'val2'}
-     sdc.output.write(newRecord)
+        # Create a new record with map field 
+        newRecord = sdc.createRecord(record.sourceId + ':newRecordId')
+        newRecord.value = {'field1' : 'val1', 'field2' : 'val2'}
+        sdc.output.write(newRecord)
 
-     # Applies if the source uses WHOLE_FILE as data format
-     input_stream = record.value['fileRef'].getInputStream()
-     try:
-       input_stream.read() Process the input stream
-     finally:  
-       input_stream.close()
+        # Applies if the source uses WHOLE_FILE as data format
+        input_stream = record.value['fileRef'].getInputStream()
+        try:
+        input_stream.read() Process the input stream
+        finally:  
+        input_stream.close()
 
-     record.attributes['name'] = record.attributes['first_name'] + ' ' + record.attributes['last_name'] # Modify a record header attribute entry
+        record.attributes['name'] = record.attributes['first_name'] + ' ' + record.attributes['last_name'] # Modify a record header attribute entry
 
-     Get a record header with field names ex. get sourceId and errorCode
-     sourceId = record.sourceId
-     errorCode = ''
-     if record.errorCode:
-       errorCode = record.errorCode
+        Get a record header with field names ex. get sourceId and errorCode
+        sourceId = record.sourceId
+        errorCode = ''
+        if record.errorCode:
+        errorCode = record.errorCode
 
     Returns:
         [type]: [description]
@@ -101,7 +105,8 @@ class Record:
         self.value = l
 
     def get_flat(self):
-        """[summary]
+        """
+        Returns a flat version of the values
 
         Returns:
             [type]: [description]
@@ -111,7 +116,7 @@ class Record:
 
 class Records:
     """
-
+    Records class containing "Record"s objects
     """
 
     NULL_BOOLEAN = None
