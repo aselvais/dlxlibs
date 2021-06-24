@@ -141,6 +141,18 @@ class Records:
     state = [] # dict that is preserved between invocations of this script. Useful for caching bits of data e.g. counters.
     log = logging # use instead of print to send log messages to the log4j log instead of stdout. loglevel is any log4j level: e.g. info, error, warn, trace.
 
+
+    def set_data(self, d):
+        """
+        Sets data as records
+
+        Args:
+            d ([type]): [description]
+        """
+        for r in d:
+            self.records.append(Record(r))
+
+
     def getFieldNull(self, record="", field_path='field path'):
         """
         Receive a constant defined above to check if the field is typed 
