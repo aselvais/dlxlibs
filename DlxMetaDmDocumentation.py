@@ -3,8 +3,7 @@ This class is used to populate the "lake_p01_snapshots" documentation from the m
 equivalent within Hue for both tables and fields. This script uses both the metadatamanger API to grab 
 documentation as well as the Cloudera Navigator API to update the documentation within Hue.
 """
-import requests
-import json
+import requests, urllib, json
 from dlxlibs.DlxLogger import DlxLogger
 logger = DlxLogger(handlers="f").get_logger()
 
@@ -18,10 +17,48 @@ class DlxMetaDmDocumentation():
     Returns:
         [type]: [description]
     """
+    
     url_base_cn = "https://ala09012.edp-prod.deluxe.com:7187/api/v14"
     cn_authtoken = "dDQ0ODA1NjpDb21ldElzQ3V0ZTEhISE="
+
     url_base_metadm = "http://ala01095.deluxe.com:8089/api"
     metadm_accesstoken = "kfLGpKTvVXrEARIp8T0q2D7R8R1dpCLEr4UC9Onz2wvnod2bGDNdpIxUaWeIN7Rw"
+
+
+    def get_mm_url(self, entity="fields", filter=""):
+        """[summary]
+
+        Args:
+            entity (str, optional): [description]. Defaults to "fields".
+            filter (str, optional): [description]. Defaults to "".
+
+        Returns:
+            [type]: [description]
+        """
+        url = self.url_base_metadm + f"/{entity}?"
+        if filter != "":
+            filter = urllib.parse.quote(json.dumps(filter))
+            url = url + "filter={filter}&"
+        url = url + "access_token={self.metadm_accesstoken}"
+        return url
+
+
+    def get_json_response(self, url="", headers={}, payload={}, method="GET"):
+        """[summary]
+
+        Args:
+            url (str, optional): [description]. Defaults to "".
+            headers (dict, optional): [description]. Defaults to {}.
+            payload (dict, optional): [description]. Defaults to {}.
+            method (str, optional): [description]. Defaults to "GET".
+
+        Returns:
+            [type]: [description]
+        """
+        logger.debug({"method": method, "url": url, "headers": headers, "data": payload})
+        _response = requests.request(method, url, headers=headers, data=payload).json()
+        logger.debug(_response)
+        return _response
 
 
     def cn_get_all_entity_relations(self, entity_id):
@@ -34,13 +71,12 @@ class DlxMetaDmDocumentation():
             [type]: [description]
         """
         url = self.url_base_cn + f"/relations?entityIds={entity_id}&types=PARENT_CHILD&roles=PARENT"
-        payload = {}
         headers = {
             'Content-Type': 'application/json',
             'Authorization': f'Basic {self.cn_authtoken}',
             'Cookie': 'NAVIGATOR_JSESSIONID_7187=node0tc6f4uiu6pnj3sbvs0h4f7we210.node0'
         }
-        return requests.request("GET", url, headers=headers, data=payload).json()
+        return self.get_json_response(url, headers)
 
 
     def cn_get_entity_info(self, entity_id):
@@ -53,13 +89,12 @@ class DlxMetaDmDocumentation():
             [type]: [description]
         """
         url = self.url_base_cn + f"/entities/{entity_id}"
-        payload = {}
         headers = {
             'Content-Type': 'application/json',
             'Authorization': f'Basic {self.cn_authtoken}',
             'Cookie': 'NAVIGATOR_JSESSIONID_7187=node016kmaqur2849fvk5fn57qamzm211.node0'
         }
-        return requests.request("GET", url, headers=headers, data=payload).json()
+        return self.get_json_response(url, headers)
 
 
     def cn_update_entity_description(self, entity_id, description):
@@ -70,13 +105,10 @@ class DlxMetaDmDocumentation():
             description ([type]): [description]
         """
         entity_info = self.cn_get_entity_info(entity_id)
-
         customProperties = entity_info["customProperties"]
         name = entity_info["name"]
         properties = entity_info["properties"]
-
         url = self.url_base_cn + f"/entities/{entity_id}"
-
         payload = json.dumps({
             "customProperties": customProperties,
             "name": name,
@@ -84,13 +116,11 @@ class DlxMetaDmDocumentation():
             "tags": None,
             "properties": properties
         })
-
         headers = {
             'Content-Type': 'application/json',
             'Authorization': f'Basic {self.cn_authtoken}'
         }
-
-        requests.request("PUT", url, headers=headers, data=payload).json()
+        self.get_json_response(url, headers, payload, "PUT")
 
 
     def mm_get_all_schemas(self):
@@ -99,10 +129,7 @@ class DlxMetaDmDocumentation():
         Returns:
             [type]: [description]
         """
-        url = self.url_base_metadm + "/schemas?access_token={self.metadm_accesstoken}"
-        payload = {}
-        headers = {}
-        return requests.request("GET", url, headers=headers, data=payload).json()
+        return self.get_json_response(self.get_mm_url("schemas"))
 
 
     def mm_get_fields_for_table_idh(self, idh):
@@ -114,10 +141,7 @@ class DlxMetaDmDocumentation():
         Returns:
             [type]: [description]
         """
-        url = self.url_base_metadm + f"/fields?filter=%7B%22where%22%3A%7B%22tables_idh%22%3A%22{idh}%22%7D%7D&access_token={self.metadm_accesstoken}"
-        payload = {}
-        headers = {}
-        return requests.request("GET", url, headers=headers, data=payload).json()
+        return self.get_json_response(self.get_mm_url("fields", {"where":{"tables_idh":idh}}))
 
 
     def mm_get_tables_for_schema_idh(self, idh):
@@ -129,10 +153,7 @@ class DlxMetaDmDocumentation():
         Returns:
             [type]: [description]
         """
-        url = self.url_base_metadm + f"/tables?filter=%7B%22where%22%3A%7B%22schemas_idh%22%3A%22{idh}%22%7D%7D&access_token={self.metadm_accesstoken}"
-        payload = {}
-        headers = {}
-        return requests.request("GET", url, headers=headers, data=payload).json()
+        return self.get_json_response(self.get_mm_url("tables", {"where":{"schemas_idh":idh}}))
 
 
     def mm_get_databases_for_database_idh(self, idh):
@@ -144,10 +165,7 @@ class DlxMetaDmDocumentation():
         Returns:
             [type]: [description]
         """
-        url = self.url_base_metadm + f"/databases?filter=%7B%22where%22%3A%7B%22idh%22%3A%22{idh}%22%7D%7D&access_token={self.metadm_accesstoken}"
-        payload = {}
-        headers = {}
-        return requests.request("GET", url, headers=headers, data=payload).json()
+        return self.get_json_response(self.get_mm_url("databases", {"where":{"idh":idh}}))
 
 
     def run_process(self, lake_entity_id = "9072149"):
@@ -170,17 +188,16 @@ class DlxMetaDmDocumentation():
             else:
                 continue
 
-            logger.debug(f"""source name:      {hue_source_name}
+            logger.info(f"""source name:      {hue_source_name}
 schema name:      {hue_schema_name}
 table name:       {hue_table_name} 
 table_entity_id:  {table_entity_id}""")
-            logger.debug(table_entity_info)
+            # logger.debug(table_entity_info)
 
             for s in mm_schemas:
                 if "schema" in s:
                     if s["schema"].strip().lower() == hue_schema_name.strip().lower():
-                        schemas_idh = s["idh"]
-                        database_idh = s["databases_idh"]
+                        schemas_idh = s["idh"] # database_idh = s["databases_idh"]
                         mm_tables_in_schema = self.mm_get_tables_for_schema_idh(schemas_idh)
 
                         for t in mm_tables_in_schema:
