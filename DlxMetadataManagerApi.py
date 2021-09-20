@@ -1,7 +1,5 @@
 """
-This class is used to populate the "lake_p01_snapshots" documentation from the metadatamanager into the entity
-equivalent within Hue for both tables and fields. This script uses both the metadatamanger API to grab 
-documentation as well as the Cloudera Navigator API to update the documentation within Hue.
+Generic methods and tools for interacting with the Metadata Manager API
 """
 import urllib, json
 from dlxlibs.DlxLogger import DlxLogger
@@ -11,9 +9,7 @@ logger = DlxLogger(handlers="f").get_logger()
 
 class DlxMetadataManagerApi(DlxAbstractApi):
     """
-    This class is used to populate the "lake_p01_snapshots" documentation from the metadatamanager into the entity
-    equivalent within Hue for both tables and fields. This script uses both the metadatamanger API to grab 
-    documentation as well as the Cloudera Navigator API to update the documentation within Hue.
+    Generic methods and tools for interacting with the Metadata Manager API
 
     Returns:
         [type]: [description]
