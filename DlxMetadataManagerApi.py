@@ -122,7 +122,8 @@ class DlxMetadataManagerApi(DlxAbstractApi):
                         "database" : field["database_name"],
                         "schema": field["schema_name"],
                         "table": field["table_name"],
-                        "lake_name": field["schema_destination_lake"],
+                        # TODO: fix this !!!!!!!!!!!!
+                        "lake_name": field["schema_destination_lake"] + '_transformer',
                         "partition_column": "",
                         "mm_columns_info": [],
                         "offset_column_name": ""
@@ -155,7 +156,10 @@ class DlxMetadataManagerApi(DlxAbstractApi):
                     logger.error(ee)
                 idx = idx + 1
             if runtimeParameters["offset_column_name"] == "":
-                runtimeParameters["offset_column_name"] = runtimeParameters["partition_column"]
+                if runtimeParameters["partition_column"] != "":
+                    runtimeParameters["offset_column_name"] = runtimeParameters["partition_column"]
+                else:
+                    runtimeParameters["offset_column_name"] = r["data"][0]["name"]
         except:
             pass
 
