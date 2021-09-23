@@ -126,7 +126,7 @@ class DlxMetadataManagerApi(DlxAbstractApi):
                         # TODO: fix this !!!!!!!!!!!!
                         "lake_name": field["schema_destination_lake"] + '_transformer',
                         "partition_column": "",
-                        "mm_columns_info": [],
+                        "mm_columns_info": {},
                         "offset_column_name": ""
                     }
                 try:
@@ -146,7 +146,7 @@ class DlxMetadataManagerApi(DlxAbstractApi):
                         "is_obfuscated":field["is_obfuscated"] if "is_obfuscated" in field else 0,
                         "is_partition": field["is_partition"] if "is_partition" in field else 0,
                     }
-                    runtimeParameters["mm_columns_info"].append(ob)
+                    runtimeParameters["mm_columns_info"][ob["name"].lower()] = ob
                     if ob["is_partition"] == 1:
                         runtimeParameters["partition_column"] = ob["name"]
                     if ob["is_pk"] == 1 and runtimeParameters["partition_column"] == "":
