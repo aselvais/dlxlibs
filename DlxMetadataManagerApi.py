@@ -122,6 +122,7 @@ class DlxMetadataManagerApi(DlxAbstractApi):
                         "database" : field["database_name"],
                         "schema": field["schema_name"],
                         "table": field["table_name"],
+                        "database_storageengine": field["database_storageengine"],
                         "destination_db": f'{field["database_name"]}__{field["schema_name"]}__{field["table_name"]}'.lower().replace(' ', '_'),
                         # TODO: fix this !!!!!!!!!!!!
                         "lake_name": field["schema_destination_lake"] + '_transformer',
