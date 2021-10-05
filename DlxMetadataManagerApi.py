@@ -18,7 +18,11 @@ class DlxMetadataManagerApi(DlxAbstractApi):
     Returns:
         [type]: [description]
     """
-
+    _number_types = [
+        "bigint","binary_double","binary","binary","bit","decimal","double",
+        "enum","float","int","integer","long","mediumint","money","number",
+        "numeric","percent","smallint","tinyint",
+    ]
     url_base_metadm = "http://ala09006.edp-prod.deluxe.com:8089/api"
     metadm_accesstoken = "7UL3JiC99haQhHfZ0iVj5QZ7fKnOGukXBZloHnmXe4TXKRLJDvqLtXVB0HEIXVZl"
 
@@ -148,22 +152,53 @@ class DlxMetadataManagerApi(DlxAbstractApi):
                         "is_partition": field["is_partition"] if "is_partition" in field else 0,
                     }
                     runtimeParameters["mm_columns_info"][ob["name"].lower()] = ob
-                    if ob["is_partition"] == 1:
-                        runtimeParameters["partition_column"] = ob["name"]
-                    if ob["is_pk"] == 1 and runtimeParameters["partition_column"] == "":
-                        runtimeParameters["partition_column"] = ob["name"]
-                    if ob["is_pk"] == 1:
-                        runtimeParameters["offset_column_name"] = ob["name"]
                 except Exception as ee:
                     logger.error(ee)
                 idx = idx + 1
-            if runtimeParameters["offset_column_name"] == "":
-                if runtimeParameters["partition_column"] != "":
-                    runtimeParameters["offset_column_name"] = runtimeParameters["partition_column"]
-                else:
-                    runtimeParameters["offset_column_name"] = r["data"][0]["name"]
         except:
             pass
 
+        offset_column_name, partition_column = self.get_partition_and_offsets_columns(r)
+        runtimeParameters['offset_column_name'] = offset_column_name
+        runtimeParameters['partition_column'] = partition_column
+        
         return runtimeParameters
+
+
+    def get_partition_and_offsets_columns(self, r={}):
+        """Define good column candidates for partition and offset
+
+        Args:
+            r (dict, optional): [description]. Defaults to {}.
+
+        Returns:
+            [type]: [description]
+        """
+        offset_column_name = ''
+        partition_column = ''
+        
+        number_column_types = []
+        try:
+            for field in r['data']:
+                if field['datatype'].strip().lower() in self._number_types:
+                    number_column_types.append(field['name'])
+                try:
+                    if field['is_pk'] == 1:
+                        offset_column_name = field['name']
+                except:
+                    pass
+                try:
+                    if field['is_partition'] == 1:
+                        partition_column = field['name']
+                except:
+                    pass
+        except:
+            pass
+
+        if offset_column_name == '' and len(number_column_types) > 0:
+            offset_column_name = number_column_types[0]
+
+        return offset_column_name, partition_column
+
+
 
