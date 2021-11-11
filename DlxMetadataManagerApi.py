@@ -118,6 +118,7 @@ class DlxMetadataManagerApi(DlxAbstractApi):
             for field in r["data"]:
                 if idx == 0:
                     runtimeParameters = {
+                        "schema_code": field["schema_code"],
                         "connection_string": field["databases_jdbc_connection_str"],
                         "username": field["databases_username"],
                         "password" : field["databases_password"],
@@ -127,7 +128,7 @@ class DlxMetadataManagerApi(DlxAbstractApi):
                         "schema": field["schema_name"],
                         "table": field["table_name"],
                         "database_storageengine": field["database_storageengine"],
-                        "destination_db": f'{field["database_name"]}__{field["schema_name"]}__{field["table_name"]}'.lower().replace(' ', '_'),
+                        "destination_db": f'{field["schema_code"]}__{field["schema_name"]}__{field["table_name"]}'.lower().replace(' ', '_'),
                         # TODO: fix this !!!!!!!!!!!!
                         "lake_name": field["schema_destination_lake"] + '_transformer',
                         "partition_column": "",
