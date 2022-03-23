@@ -24,7 +24,7 @@ class DlxMetadataManagerApi(DlxAbstractApi):
         "numeric","percent","smallint","tinyint",
     ]
     url_base_metadm = "http://ala09006.edp-prod.deluxe.com:8089/api"
-    metadm_accesstoken = "I0ir82eF3rUfJaKkChEumFaYbsoCdPqV1wBvG1kmkuyVt65etL4mIO058CDMgCw0"
+    metadm_accesstoken = "YrDLgNt5MP5051B5FfxoZbxxZEXhedeZlI6BZysemXHKuHcUQCLoUnDKcjcOJc28"
 
     def get_mm_url(self, entity="fields", filter=""):
         """Returns the URL to query for the metadata manager
