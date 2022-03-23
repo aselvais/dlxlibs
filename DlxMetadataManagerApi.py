@@ -130,7 +130,7 @@ class DlxMetadataManagerApi(DlxAbstractApi):
                         "database_storageengine": field["database_storageengine"],
                         "destination_db": f'{field["schema_code"]}__{field["schema_name"]}__{field["table_name"]}'.lower().replace(' ', '_'),
                         # TODO: fix this !!!!!!!!!!!!
-                        "lake_name": field["schema_destination_lake"] + '_transformer',
+                        "lake_name": field["schema_destination_lake"],
                         "partition_column": "",
                         "mm_columns_info": {},
                         "offset_column_name": ""
