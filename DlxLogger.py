@@ -283,6 +283,7 @@ class DlxLogger:
             kh = self._get_kafka_handler()
             if kh is not None:
                 logger.addHandler(kh)
+            # pass
 
         # with this pattern, it's rarely necessary to propagate the error up to parent
         logger.propagate = False
