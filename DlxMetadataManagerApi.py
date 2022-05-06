@@ -23,8 +23,20 @@ class DlxMetadataManagerApi(DlxAbstractApi):
         "enum","float","int","integer","long","mediumint","money","number",
         "numeric","percent","smallint","tinyint",
     ]
-    url_base_metadm = "http://ala09006.edp-prod.deluxe.com:8089/api"
-    metadm_accesstoken = "YrDLgNt5MP5051B5FfxoZbxxZEXhedeZlI6BZysemXHKuHcUQCLoUnDKcjcOJc28"
+    url_base_metadm = ""
+    metadm_accesstoken = ""
+    username=""
+    password=""
+
+
+    def __init__(self, username="", password="", url_base_metadm = "http://ala09006.edp-prod.deluxe.com:8089/api") -> None:
+        """_summary_
+        """
+        super().__init__()
+        self.username=username
+        self.password=password
+        self.url_base_metadm = url_base_metadm
+
 
     def get_mm_url(self, entity="fields", filter=""):
         """Returns the URL to query for the metadata manager
@@ -50,6 +62,8 @@ class DlxMetadataManagerApi(DlxAbstractApi):
         Returns:
             [type]: [description]
         """
+        if self.metadm_accesstoken == "":
+            self.login()
         return self.get_json_response(self.get_mm_url("schemas"))
 
 
@@ -62,6 +76,8 @@ class DlxMetadataManagerApi(DlxAbstractApi):
         Returns:
             [type]: [description]
         """
+        if self.metadm_accesstoken == "":
+            self.login()
         return self.get_json_response(self.get_mm_url("fields", {"where":{"tables_idh":idh}}))
 
 
@@ -74,6 +90,8 @@ class DlxMetadataManagerApi(DlxAbstractApi):
         Returns:
             [type]: [description]
         """
+        if self.metadm_accesstoken == "":
+            self.login()
         return self.get_json_response(self.get_mm_url("tables", {"where":{"schemas_idh":idh}}))
 
 
@@ -86,8 +104,22 @@ class DlxMetadataManagerApi(DlxAbstractApi):
         Returns:
             [type]: [description]
         """
+        if self.metadm_accesstoken == "":
+            self.login()
         return self.get_json_response(self.get_mm_url("tables", query))
 
+    def mm_get_origins_where(self, query={}):
+        """[summary]
+
+        Args:
+            where (dict, optional): [description]. Defaults to {}.
+
+        Returns:
+            [type]: [description]
+        """
+        if self.metadm_accesstoken == "":
+            self.login()
+        return self.get_json_response(self.get_mm_url("origins", query))
 
     def mm_get_databases_for_database_idh(self, idh):
         """[summary]
@@ -98,6 +130,8 @@ class DlxMetadataManagerApi(DlxAbstractApi):
         Returns:
             [type]: [description]
         """
+        if self.metadm_accesstoken == "":
+            self.login()
         return self.get_json_response(self.get_mm_url("databases", {"where":{"idh":idh}}))
 
 
@@ -110,6 +144,8 @@ class DlxMetadataManagerApi(DlxAbstractApi):
         Returns:
             [type]: [description]
         """
+        if self.metadm_accesstoken == "":
+            self.login()
         url = self.url_base_metadm + f"/view4streamsets/gettableflatfields?idh={urllib.parse.quote(idh)}&ks={urllib.parse.quote(_key)}&access_token={self.metadm_accesstoken}"
         r = self.get_json_response(url)
         runtimeParameters = {}
@@ -175,6 +211,8 @@ class DlxMetadataManagerApi(DlxAbstractApi):
         Returns:
             [type]: [description]
         """
+        if self.metadm_accesstoken == "":
+            self.login()
         offset_column_name = ''
         partition_column = ''
         
@@ -201,5 +239,22 @@ class DlxMetadataManagerApi(DlxAbstractApi):
 
         return offset_column_name, partition_column
 
+    def login(self):
+        """_summary_
+
+        Args:
+            query (dict, optional): _description_. Defaults to {}.
+
+        Returns:
+            _type_: _description_
+        """
+        responsepayload = self.get_json_response(self.url_base_metadm + "/Users/login", {}, {
+            "username": self.username, 
+            "password": self.password }, "POST")
+        try:
+            self.metadm_accesstoken = responsepayload['id']
+        except:
+            pass
+        return responsepayload
 
 

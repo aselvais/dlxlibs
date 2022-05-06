@@ -3,6 +3,7 @@ Abstraction methods and tools for interacting
 with JSON REST APIs
 """
 import requests
+import json, sys, traceback
 from dlxlibs.DlxLogger import DlxLogger
 logger = DlxLogger(handlers="f").get_logger()
 
@@ -30,8 +31,12 @@ class DlxAbstractApi():
             dict: The response body as a Python dictionary
         """
         logger.debug({"method": method, "url": url, "headers": headers, "data": payload})
-        _response = requests.request(method, url, headers=headers, data=payload).json()
-        logger.debug(_response)
-        return _response
+        try:
+            _response = requests.request(method, url, headers=headers, data=payload).json()
+            logger.debug(_response)
+            return _response
+        except Exception as e:
+            exc_info = sys.exc_info()
+            return (''.join(traceback.format_exception(*exc_info)))
 
 
