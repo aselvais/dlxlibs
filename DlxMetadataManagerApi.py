@@ -29,7 +29,7 @@ class DlxMetadataManagerApi(DlxAbstractApi):
     password=""
 
 
-    def __init__(self, username="", password="", url_base_metadm = "http://ala09006.edp-prod.deluxe.com:8089/api") -> None:
+    def __init__(self, username="", password="", url_base_metadm="http://ala09006.edp-prod.deluxe.com:8089/api") -> None:
         """_summary_
         """
         super().__init__()
