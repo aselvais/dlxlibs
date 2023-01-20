@@ -1,0 +1,45 @@
+"""
+\defgroup Logging
+Subclass of the default logging.Formatter
+for cleaning up the data going through the message and args
+parameters
+"""
+from logging import Formatter
+import json, re
+
+class DlxLoggingFormatter(Formatter):
+    """
+    Subclassing the default logging.Formatter
+
+    Args:
+        Formatter ([type]): [description]
+    """
+
+    def format(self, record):
+        """
+        Removes carriage return from the msg and custom formating
+
+        Args:
+            record ([type]): [description]
+
+        Returns:
+            [type]: [description]
+        """
+        try:
+            if re.match('^\{', record.msg):
+                try:
+                    r = json.loads(record.msg)
+                    ks = r.keys()
+                    if 'command' in ks:
+                        record.command = r["command"]
+                    if 'storagename' in ks:
+                        record.storagename = r["storagename"]
+                    if 'count' in ks:
+                        record.count = r["count"]
+                except:
+                    pass
+            else:
+                record.msg = re.sub(r'^\"|\"$', '', json.dumps(record.msg))
+        except:
+            pass
+        return super(DlxLoggingFormatter, self).format(record)
